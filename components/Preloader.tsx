@@ -72,12 +72,12 @@ export default function Preloader({ onComplete }: { onComplete: () => void }) {
           {/* Subtitle */}
           <div className="overflow-hidden mt-4">
             <motion.p
-              className="text-[11px] tracking-[0.45em] uppercase text-cream/30"
+              className="text-[11px] tracking-[0.45em] uppercase text-cream/30 text-center"
               initial={{ y: "100%" }}
               animate={{ y: phase >= 1 ? "0%" : "100%" }}
               transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
             >
-              Digital Kalakaar &nbsp;·&nbsp; Films & Production
+              Complete Digital Kalakaar
             </motion.p>
           </div>
 
