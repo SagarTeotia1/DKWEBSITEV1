@@ -5,78 +5,104 @@ import { motion, useScroll, useTransform } from "framer-motion";
 
 const HERO_VIDEO = "https://lorem.video/720p";
 
-// Stacked word reveal — each word slides up through a clipped container
+// Stacked word reveal — mirrors Preloader layout exactly
 function StackedTitle({ ready }: { ready: boolean }) {
-  const lines = [
-    { text: "digital", italic: false },
-    { text: "kalakaar", italic: true },
-  ];
+  const productionLetters = "Productions".split("");
+
   return (
-    <div className="flex flex-col items-center gap-3 md:gap-5">
-      {lines.map((line, li) => (
-        <div key={li} className="overflow-hidden">
-          <motion.h1
-            className={`block text-[clamp(3.8rem,13vw,11rem)] leading-[1.0] font-serif font-bold tracking-tight select-none ${
-              line.italic ? "text-gold italic" : "text-cream"
-            }`}
-            style={{ fontFamily: "var(--font-playfair)" }}
-            initial={{ y: "105%", skewY: 4 }}
+    <div className="flex flex-col items-center">
+
+      {/* "Digital Kalakaar" — two words side by side, Preloader-style */}
+      <div className="flex items-baseline gap-[0.3em] md:gap-[0.42em]">
+
+        {/* Digital — DM Sans light, wide-tracked */}
+        <div className="overflow-hidden pb-[0.15em]">
+          <motion.span
+            className="block select-none text-cream/90"
+            style={{
+              fontFamily: "var(--font-dm-sans)",
+              fontSize: "clamp(2.6rem, 8vw, 7.5rem)",
+              letterSpacing: "0.06em",
+              fontWeight: 300,
+              lineHeight: 1,
+            }}
+            initial={{ y: "110%", skewY: 3 }}
             animate={ready ? { y: "0%", skewY: 0 } : {}}
-            transition={{ duration: 1.1, delay: 0.1 + li * 0.18, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1.0, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           >
-            {line.italic ? (
-              <>
-                {line.text.split("").map((ch, ci) => (
-                  <motion.span
-                    key={ci}
-                    className="inline-block"
-                    initial={{ opacity: 0 }}
-                    animate={ready ? { opacity: 1 } : {}}
-                    transition={{ delay: 0.3 + li * 0.18 + ci * 0.04, duration: 0.4 }}
-                  >
-                    {ch}
-                  </motion.span>
-                ))}
-                <motion.span
-                  className="text-cream not-italic"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={ready ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 0.9, duration: 0.5 }}
-                >
-                  .
-                </motion.span>
-              </>
-            ) : (
-              line.text
-            )}
-          </motion.h1>
+            Digital
+          </motion.span>
         </div>
-      ))}
+
+        {/* Kalakaar — Playfair italic gold */}
+        <div className="overflow-hidden pb-[0.15em]">
+          <motion.span
+            className="block select-none text-gold italic"
+            style={{
+              fontFamily: "var(--font-playfair)",
+              fontSize: "clamp(2.6rem, 8vw, 7.5rem)",
+              fontWeight: 700,
+              letterSpacing: "-0.02em",
+              lineHeight: 1,
+            }}
+            initial={{ y: "110%", skewY: 3 }}
+            animate={ready ? { y: "0%", skewY: 0 } : {}}
+            transition={{ duration: 1.0, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          >
+            Kalakaar
+            <motion.span
+              className="not-italic text-cream/60"
+              initial={{ opacity: 0 }}
+              animate={ready ? { opacity: 1 } : {}}
+              transition={{ duration: 0.4, delay: 0.9 }}
+            >
+              .
+            </motion.span>
+          </motion.span>
+        </div>
+      </div>
+
+      {/* Thin gold divider — draws in after words land */}
+      <motion.div
+        className="h-1 bg-gradient-to-r from-transparent via-gold/80 to-transparent mt-4"
+        style={{ width: "100%", transformOrigin: "center" }}
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={ready ? { scaleX: 1, opacity: 1 } : {}}
+        transition={{ duration: 0.7, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      />
+
+      {/* "Productions" — letter-by-letter reveal, small-caps tracking */}
+      <div className="flex items-center mt-4 overflow-hidden">
+        {productionLetters.map((char, i) => (
+          <div key={i} className="overflow-hidden">
+            <motion.span
+              className="block select-none text-gold"
+              style={{
+                fontFamily: "var(--font-dm-sans)",
+                fontSize: "clamp(0.8rem, 2vw, 1.2rem)",
+                letterSpacing: "0.55em",
+                fontWeight: 700,
+                textTransform: "uppercase",
+                lineHeight: 1,
+              }}
+              initial={{ y: "110%", opacity: 0 }}
+              animate={ready ? { y: "0%", opacity: 1 } : {}}
+              transition={{
+                duration: 0.5,
+                delay: 0.9 + i * 0.045,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              {char}
+            </motion.span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
-function SubtitleWords({ ready }: { ready: boolean }) {
-  const words = ["Commercials", "·", "Films", "·", "Digital", "Content"];
-  return (
-    <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 mt-6">
-      {words.map((w, i) => (
-        <div key={i} className="overflow-hidden">
-          <motion.span
-            className={`block text-[clamp(0.6rem,1.5vw,0.85rem)] tracking-[0.22em] uppercase font-light ${
-              w === "·" ? "text-gold/50" : "text-cream/50"
-            }`}
-            initial={{ y: "110%", opacity: 0 }}
-            animate={ready ? { y: "0%", opacity: 1 } : {}}
-            transition={{ duration: 0.6, delay: 1.1 + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-          >
-            {w}
-          </motion.span>
-        </div>
-      ))}
-    </div>
-  );
-}
+
 
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -145,7 +171,7 @@ export default function Hero() {
             style={{ y: titleY, opacity: titleOpacity }}
           >
             <StackedTitle ready={ready} />
-            <SubtitleWords ready={ready} />
+           
           </motion.div>
 
           {/* Corner label */}

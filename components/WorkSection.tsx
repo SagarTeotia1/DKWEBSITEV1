@@ -4,12 +4,12 @@ import { useRef, useState } from "react";
 import { motion, useInView, AnimatePresence, LayoutGroup } from "framer-motion";
 
 const projects = [
-  { id: 1, title: "Lumière Jewels", category: "Brand Commercial", year: "2024", duration: "0:90", video: "https://lorem.video/720p", featured: true },
-  { id: 2, title: "Nakshatra Couture", category: "Fashion Film", year: "2024", duration: "2:15", video: "https://lorem.video/720p", featured: false },
-  { id: 3, title: "Arya Spirits", category: "Product Commercial", year: "2023", duration: "0:45", video: "https://lorem.video/720p", featured: false },
-  { id: 4, title: "Horizon Realty", category: "Corporate Film", year: "2023", duration: "3:30", video: "https://lorem.video/720p", featured: false },
-  { id: 5, title: "Zephyr Fragrances", category: "Digital Content", year: "2023", duration: "1:00", video: "https://lorem.video/720p", featured: false },
-  { id: 6, title: "Indus Heritage", category: "Documentary", year: "2022", duration: "12:00", video: "https://lorem.video/720p", featured: false },
+  { id: 1, title: "Lumière Jewels", category: "Brand Commercial", year: "2024", duration: "0:90", video: "https://videos.pexels.com/video-files/3571264/3571264-sd_640_360_30fps.mp4", featured: true },
+  { id: 2, title: "Nakshatra Couture", category: "Fashion Film", year: "2024", duration: "2:15", video: "https://videos.pexels.com/video-files/855370/855370-sd_640_360_25fps.mp4", featured: false },
+  { id: 3, title: "Arya Spirits", category: "Product Commercial", year: "2023", duration: "0:45", video: "https://videos.pexels.com/video-files/6990394/6990394-sd_640_360_24fps.mp4", featured: false },
+  { id: 4, title: "Horizon Realty", category: "Corporate Film", year: "2023", duration: "3:30", video: "https://videos.pexels.com/video-files/18675658/18675658-sd_640_360_30fps.mp4", featured: false },
+  { id: 5, title: "Zephyr Fragrances", category: "Digital Content", year: "2023", duration: "1:00", video: "https://videos.pexels.com/video-files/6990393/6990393-sd_640_360_24fps.mp4", featured: false },
+  { id: 6, title: "Indus Heritage", category: "Documentary", year: "2022", duration: "12:00", video: "https://videos.pexels.com/video-files/855369/855369-sd_640_360_25fps.mp4", featured: false },
 ];
 
 const categories = ["All", "Brand Commercial", "Fashion Film", "Product Commercial", "Corporate Film", "Digital Content", "Documentary"];
@@ -58,13 +58,17 @@ function WorkCard({ project, index }: { project: typeof projects[0]; index: numb
   return (
     <motion.div
       ref={ref}
-      className="work-card group relative overflow-hidden rounded-2xl"
+      className="work-card group relative overflow-hidden rounded-2xl cursor-grab active:cursor-grabbing"
       style={{ clipPath: inView ? "inset(0% 0% 0% 0% round 1rem)" : "inset(0% 0% 100% 0% round 1rem)" }}
       animate={inView ? { clipPath: "inset(0% 0% 0% 0% round 1rem)" } : {}}
       transition={{ duration: 0.9, delay: 0.08 * index, ease: [0.22, 1, 0.36, 1] }}
       initial={{ clipPath: "inset(0% 0% 100% 0% round 1rem)" }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      whileDrag={{ scale: 1.02 }}
+      drag
+      dragElastic={0.2}
+      dragTransition={{ power: 0.3, restDelta: 0.001 }}
     >
       <div className="aspect-[4/3] relative bg-white/5">
         <video ref={videoRef} src={project.video} muted loop playsInline preload="metadata" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]" />
@@ -211,7 +215,7 @@ export default function WorkSection() {
         </LayoutGroup>
       </div>
 
-      {/* Grid — animated */}
+      {/* Grid — animated with drag support */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeCategory}

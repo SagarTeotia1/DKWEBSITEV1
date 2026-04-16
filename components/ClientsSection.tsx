@@ -61,23 +61,7 @@ export default function ClientsSection() {
           <span className="w-5 h-px bg-[#c9a84c]" />
         </motion.p>
 
-        <motion.h2
-          className="font-serif italic mx-auto"
-          style={{
-            fontFamily: "var(--font-playfair)",
-            fontSize: "clamp(2rem, 6vw, 6.5rem)",
-            lineHeight: 1.1,
-            letterSpacing: "-0.025em",
-            color: "#f0ebe0",
-            opacity: 0.38,
-            maxWidth: "860px",
-          }}
-          initial={{ opacity: 0, y: 28 }}
-          animate={inView ? { opacity: 0.38, y: 0 } : {}}
-          transition={{ duration: 1.1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        >
-          We collaborate with brands and agencies to turn good ideas into stellar content
-        </motion.h2>
+
       </div>
 
       {/* Thin divider */}

@@ -272,6 +272,7 @@ export default function ReelSection() {
   return (
     <section
       ref={sectionRef}
+      id="reel"
       className="relative bg-[#0a0a0a] z-20 overflow-hidden"
     >
       <div className="h-px mx-6 md:mx-16 bg-white/[0.06]" />

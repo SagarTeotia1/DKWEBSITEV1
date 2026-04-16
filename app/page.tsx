@@ -22,6 +22,7 @@ export default function Home() {
         <AboutSection />
         <ClientsSection />
         <ReelSection />
+        <ServicesSection />
       </main>
       <Footer />
     </>

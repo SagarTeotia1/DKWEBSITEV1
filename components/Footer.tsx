@@ -22,7 +22,7 @@ export default function Footer() {
   }
 
   return (
-    <footer ref={sectionRef} className="relative bg-[#080808] overflow-hidden">
+    <footer ref={sectionRef} id="contact" className="relative bg-[#080808] overflow-hidden">
 
       {/* ════════════════ CTA SECTION ════════════════ */}
       <div className="relative overflow-hidden pt-16 pb-0 px-6 md:px-14 lg:px-20">

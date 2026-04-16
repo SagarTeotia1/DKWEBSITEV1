@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
-  { label: "Work", href: "#work" },
-  { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Contact", href: "#contact" },
+  { label: "About", href: "#about", isCTA: false },
+  { label: "Work", href: "/work", isCTA: false },
+  { label: "Services", href: "#services", isCTA: false },
+  { label: "Contact", href: "#contact", isCTA: true },
 ];
 
 export default function Navbar() {
@@ -29,8 +29,12 @@ export default function Navbar() {
 
   const handleNavClick = (href: string) => {
     setMenuOpen(false);
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    if (href.startsWith("#")) {
+      const el = document.querySelector(href);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    } else {
+      window.location.href = href;
+    }
   };
 
   return (
@@ -70,13 +74,19 @@ export default function Navbar() {
                 <motion.button
                   key={link.label}
                   onClick={() => handleNavClick(link.href)}
-                  className="relative text-sm font-bold tracking-[0.1em] text-white hover:text-white transition-colors duration-300 group"
+                  className={`relative text-sm font-bold tracking-[0.1em] transition-colors duration-300 group ${
+                    link.isCTA
+                      ? "px-6 py-2 rounded-lg border border-gold/60 text-gold hover:bg-gold/10"
+                      : "text-white hover:text-gold"
+                  }`}
                   initial={{ opacity: 0, y: -12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 * i + 0.3, duration: 0.5 }}
                 >
                   {link.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-gold group-hover:w-full transition-all duration-300" />
+                  {!link.isCTA && (
+                    <span className="absolute -bottom-1 left-0 w-0 h-px bg-gold group-hover:w-full transition-all duration-300" />
+                  )}
                 </motion.button>
               ))}
 
@@ -123,7 +133,11 @@ export default function Navbar() {
                 <motion.button
                   key={link.label}
                   onClick={() => handleNavClick(link.href)}
-                  className="text-4xl font-serif font-bold text-white hover:text-gold transition-colors duration-300"
+                  className={`text-4xl font-serif font-bold transition-colors duration-300 ${
+                    link.isCTA
+                      ? "px-6 py-3 rounded-lg border border-gold/60 text-gold"
+                      : "text-white hover:text-gold"
+                  }`}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 * i + 0.2, duration: 0.4 }}
