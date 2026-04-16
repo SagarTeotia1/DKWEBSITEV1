@@ -9,7 +9,6 @@ import ReelSection from "@/components/ReelSection";
 import ServicesSection from "@/components/ServicesSection";
 import Footer from "@/components/Footer";
 import Preloader from "@/components/Preloader";
-
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
 

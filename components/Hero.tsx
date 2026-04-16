@@ -239,8 +239,9 @@ export default function Hero() {
               Award-Winning Production House
             </span>
           </div>
+
           <button
-            onClick={() => document.querySelector("#work")?.scrollIntoView({ behavior: "smooth" })}
+            onClick={() => document.querySelector("#reel")?.scrollIntoView({ behavior: "smooth" })}
             className="group flex items-center gap-2 text-[11px] tracking-[0.25em] uppercase text-gold/60 hover:text-gold transition-colors duration-300"
           >
             View Work

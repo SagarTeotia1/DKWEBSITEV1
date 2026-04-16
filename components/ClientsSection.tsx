@@ -82,9 +82,10 @@ export default function ClientsSection() {
           return (
             <motion.div
               key={i}
-              className="flex items-center justify-center py-10 md:py-14 px-6"
+              className="flex items-center justify-center py-10 md:py-14 px-6 group"
               initial={{ opacity: 0, y: 12 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
+              whileHover={{ y: -3 }}
               transition={{
                 duration: 0.6,
                 delay: 0.45 + row * 0.12 + col * 0.05,

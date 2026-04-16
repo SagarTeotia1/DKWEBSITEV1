@@ -39,46 +39,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Custom cursor */
-.cursor-dot {
-  width: 8px;
-  height: 8px;
-  background-color: #c9a96e;
-  border-radius: 50%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 99999;
-  transform: translate(-50%, -50%);
-  transition: width 0.15s ease, height 0.15s ease, background-color 0.15s ease;
-}
-
-.cursor-ring {
-  width: 36px;
-  height: 36px;
-  border: 1px solid rgba(201, 169, 110, 0.6);
-  border-radius: 50%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 99998;
-  transform: translate(-50%, -50%);
-  transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
-}
-
-.cursor-dot.hovering {
-  width: 12px;
-  height: 12px;
-  background-color: #f5f0e8;
-}
-
-.cursor-ring.hovering {
-  width: 60px;
-  height: 60px;
-  border-color: rgba(245, 240, 232, 0.4);
-}
 
 /* Smooth scroll snap for sections */
 @layer utilities {

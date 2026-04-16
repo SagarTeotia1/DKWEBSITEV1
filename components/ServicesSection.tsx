@@ -1,7 +1,14 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
+import { useRef, useState } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useMotionValueEvent,
+  useMotionTemplate,
+  type MotionValue,
+} from "framer-motion";
 
 const SERVICES = [
   {
@@ -10,7 +17,8 @@ const SERVICES = [
     tagline: "Narratives that move people",
     description:
       "Brand stories and emotional campaigns that forge authentic connections. We craft visual narratives that linger long after the screen goes dark.",
-    video: "https://videos.pexels.com/video-files/3571264/3571264-sd_640_360_30fps.mp4",
+    video:
+      "https://videos.pexels.com/video-files/3571264/3571264-sd_640_360_30fps.mp4",
   },
   {
     number: "02",
@@ -18,7 +26,8 @@ const SERVICES = [
     tagline: "Short. Sharp. Unforgettable.",
     description:
       "Serialised short-form dramatic content engineered for social platforms. High-concept stories in compact formats that demand to be rewatched.",
-    video: "https://videos.pexels.com/video-files/855370/855370-sd_640_360_25fps.mp4",
+    video:
+      "https://videos.pexels.com/video-files/855370/855370-sd_640_360_25fps.mp4",
   },
   {
     number: "03",
@@ -26,7 +35,8 @@ const SERVICES = [
     tagline: "Broadcast quality. Every frame.",
     description:
       "Television commercials built with cinematic precision. From concept to colour grade, we create spots that captivate mass audiences and drive action.",
-    video: "https://videos.pexels.com/video-files/6990394/6990394-sd_640_360_24fps.mp4",
+    video:
+      "https://videos.pexels.com/video-files/6990394/6990394-sd_640_360_24fps.mp4",
   },
   {
     number: "04",
@@ -34,7 +44,8 @@ const SERVICES = [
     tagline: "Art with intention.",
     description:
       "Award-worthy short films that showcase vision, talent, and craft. Stories told with economy and impact — every second earns its place.",
-    video: "https://videos.pexels.com/video-files/18675658/18675658-sd_640_360_30fps.mp4",
+    video:
+      "https://videos.pexels.com/video-files/18675658/18675658-sd_640_360_30fps.mp4",
   },
   {
     number: "05",
@@ -42,7 +53,8 @@ const SERVICES = [
     tagline: "Truth, beautifully told.",
     description:
       "In-depth documentary productions exploring real stories with cinematic depth. Journalistic rigour meets visual artistry.",
-    video: "https://videos.pexels.com/video-files/6990393/6990393-sd_640_360_24fps.mp4",
+    video:
+      "https://videos.pexels.com/video-files/6990393/6990393-sd_640_360_24fps.mp4",
   },
   {
     number: "06",
@@ -50,7 +62,8 @@ const SERVICES = [
     tagline: "Authentic. Scalable. Effective.",
     description:
       "User-generated-style content that feels native to the platform. Raw authenticity, strategic intent — the kind of content people actually share.",
-    video: "https://videos.pexels.com/video-files/855369/855369-sd_640_360_25fps.mp4",
+    video:
+      "https://videos.pexels.com/video-files/855369/855369-sd_640_360_25fps.mp4",
   },
   {
     number: "07",
@@ -58,7 +71,8 @@ const SERVICES = [
     tagline: "Real voices. Real impact.",
     description:
       "Street-style interviews and opinion captures that surface genuine reactions. Social proof in its most credible, compelling form.",
-    video: "https://videos.pexels.com/video-files/7622850/7622850-sd_640_360_30fps.mp4",
+    video:
+      "https://videos.pexels.com/video-files/7622850/7622850-sd_640_360_30fps.mp4",
   },
 ];
 
@@ -70,117 +84,135 @@ interface CardProps {
 }
 
 function ServiceCard({ service, index, total, scrollYProgress }: CardProps) {
-  // Improved segment calculation for smoother animations
-  const seg = 1 / (total + 1);
-  const cardStart = index * seg;
-  const nextCardStart = index < total - 1 ? (index + 1) * seg : 1;
+  const N = total;
+  const seg = 1 / N;
 
-  // Clamp all values to [0, 1]
-  const yStart = Math.max(0, Math.min(cardStart - 0.05, 1));
-  const yEnd = Math.max(0, Math.min(cardStart + 0.1, 1));
-  const opacityStart = Math.max(0, Math.min(cardStart - 0.02, 1));
-  const opacityEnd = Math.max(0, Math.min(cardStart + 0.15, 1));
-  const scaleStart = Math.max(0, Math.min(nextCardStart - 0.08, 1));
-  const scaleEnd = Math.max(0, Math.min(nextCardStart + 0.15, 1));
+  /*
+   * Animation timing — the key fix:
+   * Exit (scale + dim) starts only AFTER the next card has fully entered.
+   * This eliminates the bleed-through where a scaled-down card is visible
+   * around the edges of a partially-entered card.
+   *
+   * For card i:
+   *   entryStart = i*seg - seg*0.30   (slide begins slightly before its turn)
+   *   entryEnd   = i*seg + seg*0.12   (card fully settled)
+   *   exitStart  = entryEnd of card (i+1) = (i+1)*seg + seg*0.12
+   *   exitEnd    = exitStart + seg*0.25
+   *
+   * This guarantees a clean gap between entry completion and exit start.
+   */
+  const entryStart = Math.max(0, index * seg - seg * 0.3);
+  const entryEnd = index * seg + seg * 0.12;
 
-  // Staggered entrance: each card slides up smoothly
+  const nextEntryEnd = (index + 1) * seg + seg * 0.12; // when next card finishes entering
+  const exitStart = nextEntryEnd;
+  const exitEnd = Math.min(1, exitStart + seg * 0.25);
+
+  const isLast = index === total - 1;
+
+  // Y — first card is always 0%; others slide up from 105%
   const y = useTransform(
     scrollYProgress,
-    [yStart, yEnd],
-    index === 0 ? ["0%", "0%"] : ["120%", "0%"]
+    index === 0 ? [0, 1] : [entryStart, entryEnd],
+    index === 0 ? ["0%", "0%"] : ["105%", "0%"]
   );
 
-  // Smooth opacity fade-in
-  const opacity = useTransform(
-    scrollYProgress,
-    [opacityStart, opacityEnd],
-    [index === 0 ? 1 : 0, 1]
-  );
-
-  // Aggressive scale as next card pushes it back
+  // Scale — push back once NEXT card is fully in
   const scale = useTransform(
     scrollYProgress,
-    [scaleStart, scaleEnd],
-    [1, index < total - 1 ? 0.82 : 1]
+    [exitStart, exitEnd],
+    [1, isLast ? 1 : 0.88]
   );
 
-  // Very aggressive dimming for background cards - much darker
-  const brightness = useTransform(
+  // Brightness — aggressively dim when pushed back
+  const brightnessVal = useTransform(
     scrollYProgress,
-    [scaleStart, scaleEnd],
-    [
-      "brightness(1)",
-      index < total - 1 ? "brightness(0.25)" : "brightness(1)"
-    ]
+    [exitStart, exitEnd],
+    [1, isLast ? 1 : 0.06]
   );
+  const saturateVal = useTransform(
+    scrollYProgress,
+    [exitStart, exitEnd],
+    [1, isLast ? 1 : 0.3]
+  );
+  const filter = useMotionTemplate`brightness(${brightnessVal}) saturate(${saturateVal})`;
 
   return (
     <motion.div
-      style={{ 
-        y, 
-        opacity, 
-        scale, 
-        filter: brightness,
-        zIndex: index + 1 
-      }}
+      style={{ y, scale, filter, zIndex: index + 1 }}
       className="absolute inset-0"
     >
-      {/* Card shell — vertical stack on mobile, horizontal on desktop */}
-      <div className="w-full h-full bg-[#0f0f0f] rounded-[1.5rem] md:rounded-[2rem] border border-cream/[0.08] overflow-hidden relative flex flex-col md:flex-row shadow-2xl">
+      <div className="w-full h-full rounded-[1.75rem] md:rounded-[2rem] overflow-hidden relative bg-[#0d0d0d] border border-cream/[0.05] shadow-[0_48px_96px_rgba(0,0,0,0.85)]">
 
-        {/* Top gold hairline */}
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+        {/* Gold top hairline */}
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent z-20" />
 
-        {/* ── Video Section (Top on Mobile, Right on Desktop) ── */}
-        <div className="w-full md:w-2/5 h-64 md:h-full relative overflow-hidden flex-shrink-0 group">
+        {/* ── Video: right 56% on desktop, top 42% on mobile ── */}
+        <div
+          className="absolute overflow-hidden
+            inset-x-0 top-0 h-[42%]
+            md:inset-y-0 md:right-0 md:h-auto md:w-[56%] md:left-auto"
+        >
           <video
             src={service.video}
             autoPlay
             muted
             loop
             playsInline
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover"
           />
-          
-          {/* Video overlay gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-l from-black/60 via-black/20 to-transparent" />
-
-          {/* Play icon indicator */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <motion.div
-              className="w-14 h-14 rounded-full border border-cream/40 flex items-center justify-center"
-              whileHover={{ scale: 1.1, borderColor: "rgb(201, 169, 110)" }}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="text-cream ml-1">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            </motion.div>
-          </div>
+          {/* Desktop: gradient bleeds left so text reads cleanly */}
+          <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-[#0d0d0d] via-[#0d0d0d]/55 to-transparent pointer-events-none" />
+          {/* Mobile: gradient bleeds down */}
+          <div className="md:hidden absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0d0d0d] pointer-events-none" />
+          {/* Universal vignette on bottom */}
+          <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#0d0d0d]/70 to-transparent pointer-events-none" />
         </div>
 
-        {/* ── Left: Content Section ── */}
-        <div className="flex-1 flex flex-col justify-between p-6 md:p-10 lg:p-12">
+        {/* ── Watermark number — desktop only ── */}
+        <div
+          className="hidden md:block absolute bottom-2 right-[40%] select-none pointer-events-none z-[5] leading-none"
+          aria-hidden="true"
+          style={{
+            fontFamily: "var(--font-playfair)",
+            fontSize: "clamp(7rem, 13vw, 13rem)",
+            fontWeight: 700,
+            color: "rgba(255,255,255,0.022)",
+            letterSpacing: "-0.04em",
+          }}
+        >
+          {service.number}
+        </div>
+
+        {/* ── Text content ── */}
+        <div
+          className="
+            absolute z-10 flex flex-col justify-between
+            inset-x-0 bottom-0 top-[36%] p-5
+            md:inset-y-0 md:left-0 md:top-0 md:w-[52%] md:right-auto md:p-10 lg:p-14
+          "
+        >
+          {/* Top block */}
           <div>
             {/* Number + rule */}
-            <div className="flex items-center gap-4 mb-6 md:mb-8">
+            <div className="flex items-center gap-4 mb-6 md:mb-10">
               <span
-                className="text-[10px] md:text-[11px] tracking-[0.55em] uppercase text-gold/60 font-medium flex-shrink-0"
+                className="text-[9px] md:text-[10px] tracking-[0.65em] uppercase text-gold/40 flex-shrink-0 font-medium"
                 style={{ fontFamily: "var(--font-dm-sans)" }}
               >
                 {service.number}
               </span>
-              <div className="flex-1 h-px bg-gradient-to-r from-gold/30 to-transparent" />
+              <div className="flex-1 h-px bg-gradient-to-r from-gold/20 to-transparent" />
             </div>
 
             {/* Title */}
             <h3
-              className="text-cream leading-tight mb-3 md:mb-4"
+              className="text-cream mb-2 md:mb-3 leading-[1.05]"
               style={{
                 fontFamily: "var(--font-playfair)",
-                fontSize: "clamp(1.5rem, 4vw, 2.5rem)",
+                fontSize: "clamp(1.7rem, 3.2vw, 3rem)",
                 fontWeight: 700,
-                letterSpacing: "-0.02em",
-                lineHeight: 1.1,
+                letterSpacing: "-0.025em",
               }}
             >
               {service.title}
@@ -188,21 +220,26 @@ function ServiceCard({ service, index, total, scrollYProgress }: CardProps) {
 
             {/* Tagline */}
             <p
-              className="text-gold/70 italic mb-5 md:mb-6 text-[0.9rem] md:text-[1rem]"
+              className="text-gold/55 italic mb-5 md:mb-7"
               style={{
                 fontFamily: "var(--font-playfair)",
+                fontSize: "clamp(0.85rem, 1.1vw, 1rem)",
               }}
             >
               {service.tagline}
             </p>
 
+            {/* Short rule */}
+            <div className="w-7 h-px bg-gold/20 mb-5 md:mb-7" />
+
             {/* Description */}
             <p
-              className="text-cream/45 leading-[1.8] text-[0.85rem] md:text-[0.92rem]"
+              className="text-cream/35 leading-[1.85]"
               style={{
                 fontFamily: "var(--font-dm-sans)",
                 fontWeight: 300,
-                maxWidth: "48ch",
+                fontSize: "clamp(0.78rem, 0.95vw, 0.875rem)",
+                maxWidth: "43ch",
               }}
             >
               {service.description}
@@ -210,16 +247,17 @@ function ServiceCard({ service, index, total, scrollYProgress }: CardProps) {
           </div>
 
           {/* Bottom row */}
-          <div className="mt-8 md:mt-10 flex items-center justify-between">
+          <div className="flex items-center justify-between mt-5 md:mt-0">
             <motion.button
-              className="flex items-center gap-2 text-[10px] md:text-[11px] tracking-[0.35em] uppercase text-gold/50 hover:text-gold transition-colors duration-300 group"
+              whileHover={{ x: 6 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              className="flex items-center gap-2 text-[9px] md:text-[10px] tracking-[0.45em] uppercase text-gold/40 hover:text-gold transition-colors duration-300"
               style={{ fontFamily: "var(--font-dm-sans)" }}
-              whileHover={{ x: 4 }}
             >
               Enquire
               <svg
-                width="12"
-                height="12"
+                width="10"
+                height="10"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -230,10 +268,15 @@ function ServiceCard({ service, index, total, scrollYProgress }: CardProps) {
             </motion.button>
 
             <span
-              className="text-[10px] tracking-[0.3em] text-cream/15"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+              className="tabular-nums text-cream/10"
+              style={{
+                fontFamily: "var(--font-dm-sans)",
+                fontSize: "0.65rem",
+                letterSpacing: "0.3em",
+              }}
             >
-              {index + 1}&thinsp;/&thinsp;{total}
+              {String(index + 1).padStart(2, "0")}&thinsp;/&thinsp;
+              {String(total).padStart(2, "0")}
             </span>
           </div>
         </div>
@@ -244,18 +287,31 @@ function ServiceCard({ service, index, total, scrollYProgress }: CardProps) {
 
 export default function ServicesSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
   });
 
+  // Track which service is active for the header counter
+  useMotionValueEvent(scrollYProgress, "change", (v) => {
+    const i = Math.min(
+      Math.floor(v * SERVICES.length),
+      SERVICES.length - 1
+    );
+    setActiveIndex(i);
+  });
+
+  // Gold progress bar width
+  const progressWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
   return (
     <section
       id="services"
       ref={sectionRef}
       className="relative"
-      style={{ height: `${SERVICES.length * 85 + 120}vh` }}
+      style={{ height: `${SERVICES.length * 95 + 80}vh` }}
     >
       <div className="sticky top-0 h-screen flex flex-col bg-[#0a0a0a] overflow-hidden">
 
@@ -268,13 +324,23 @@ export default function ServicesSection() {
           }}
         />
 
+        {/* Ambient glow — follows active service subtly */}
+        <div
+          className="absolute inset-0 pointer-events-none z-0 opacity-40"
+          style={{
+            background:
+              "radial-gradient(ellipse 60% 50% at 75% 60%, rgba(201,169,110,0.04) 0%, transparent 70%)",
+          }}
+        />
+
         {/* ── Section header ── */}
-        <div className="relative z-10 flex-shrink-0 px-4 md:px-8 pt-12 md:pt-14 pb-4 md:pb-5">
+        <div className="relative z-10 flex-shrink-0 px-4 md:px-8 pt-10 md:pt-12 pb-3">
           <div className="max-w-6xl mx-auto">
-            <div className="flex items-end justify-between mb-5 md:mb-6">
+            <div className="flex items-end justify-between mb-3 md:mb-4">
+              {/* Left: label + title */}
               <div>
                 <p
-                  className="text-[10px] md:text-[11px] tracking-[0.5em] uppercase text-gold/50 mb-2"
+                  className="text-[9px] md:text-[10px] tracking-[0.55em] uppercase text-gold/40 mb-1.5"
                   style={{ fontFamily: "var(--font-dm-sans)" }}
                 >
                   What We Do
@@ -283,9 +349,9 @@ export default function ServicesSection() {
                   className="text-cream"
                   style={{
                     fontFamily: "var(--font-playfair)",
-                    fontSize: "clamp(2rem, 4vw, 3rem)",
+                    fontSize: "clamp(1.7rem, 3.2vw, 2.6rem)",
                     fontWeight: 700,
-                    letterSpacing: "-0.02em",
+                    letterSpacing: "-0.025em",
                     lineHeight: 1,
                   }}
                 >
@@ -299,21 +365,51 @@ export default function ServicesSection() {
                 </h2>
               </div>
 
-              <p
-                className="text-cream/25 text-[10px] text-right tracking-[0.08em]"
-                style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 300 }}
-              >
-                Scroll to explore
-              </p>
+              {/* Right: live service counter */}
+              <div className="text-right flex items-baseline gap-1.5">
+                <motion.span
+                  key={activeIndex}
+                  initial={{ y: 8, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                  className="text-gold/50 tabular-nums"
+                  style={{
+                    fontFamily: "var(--font-playfair)",
+                    fontSize: "clamp(1.1rem, 2vw, 1.5rem)",
+                    fontStyle: "italic",
+                  }}
+                >
+                  {String(activeIndex + 1).padStart(2, "0")}
+                </motion.span>
+                <span
+                  className="text-cream/15 tabular-nums"
+                  style={{
+                    fontFamily: "var(--font-dm-sans)",
+                    fontSize: "0.65rem",
+                    letterSpacing: "0.2em",
+                  }}
+                >
+                  / {String(SERVICES.length).padStart(2, "0")}
+                </span>
+              </div>
             </div>
 
-            {/* Gold rule */}
-            <div className="h-px bg-gradient-to-r from-gold/25 via-gold/10 to-transparent" />
+            {/* Progress track */}
+            <div className="h-px bg-cream/[0.07] overflow-hidden rounded-full">
+              <motion.div
+                className="h-full rounded-full"
+                style={{
+                  width: progressWidth,
+                  background:
+                    "linear-gradient(90deg, rgba(201,169,110,0.7) 0%, rgba(201,169,110,0.3) 100%)",
+                }}
+              />
+            </div>
           </div>
         </div>
 
         {/* ── Stacking cards ── */}
-        <div className="relative z-10 flex-1 px-4 md:px-8 pb-5 overflow-hidden">
+        <div className="relative z-10 flex-1 px-4 md:px-8 pb-4 overflow-hidden">
           <div className="relative h-full max-w-6xl mx-auto">
             {SERVICES.map((service, i) => (
               <ServiceCard
