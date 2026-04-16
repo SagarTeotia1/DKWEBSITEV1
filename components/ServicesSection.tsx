@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   motion,
   useScroll,
@@ -84,6 +84,8 @@ interface CardProps {
 }
 
 function ServiceCard({ service, index, total, scrollYProgress }: CardProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [muted, setMuted] = useState(true);
   const N = total;
   const seg = 1 / N;
 
@@ -137,6 +139,11 @@ function ServiceCard({ service, index, total, scrollYProgress }: CardProps) {
   );
   const filter = useMotionTemplate`brightness(${brightnessVal}) saturate(${saturateVal})`;
 
+  useEffect(() => {
+    if (!videoRef.current) return;
+    videoRef.current.muted = muted;
+  }, [muted]);
+
   return (
     <motion.div
       style={{ y, scale, filter, zIndex: index + 1 }}
@@ -154,13 +161,34 @@ function ServiceCard({ service, index, total, scrollYProgress }: CardProps) {
             md:inset-y-0 md:right-0 md:h-auto md:w-[56%] md:left-auto"
         >
           <video
+            ref={videoRef}
             src={service.video}
             autoPlay
-            muted
+            muted={muted}
             loop
             playsInline
             className="w-full h-full object-cover"
           />
+          <button
+            type="button"
+            onClick={() => setMuted((prev) => !prev)}
+            aria-label={muted ? "Unmute video" : "Mute video"}
+            className="absolute bottom-4 right-4 z-[22] w-10 h-10 rounded-full bg-[#3f434c]/95 border border-white/10 flex items-center justify-center text-[#d7dbe2] hover:bg-[#4a4f5a] transition-colors duration-300"
+          >
+            {muted ? (
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M11 5 6 9H2v6h4l5 4V5z" />
+                <line x1="23" y1="9" x2="17" y2="15" />
+                <line x1="17" y1="9" x2="23" y2="15" />
+              </svg>
+            ) : (
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M11 5 6 9H2v6h4l5 4V5z" />
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+              </svg>
+            )}
+          </button>
           {/* Desktop: gradient bleeds left so text reads cleanly */}
           <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-[#0d0d0d] via-[#0d0d0d]/55 to-transparent pointer-events-none" />
           {/* Mobile: gradient bleeds down */}
