@@ -52,13 +52,26 @@ function WorkCard({ project, index }: { project: typeof projects[0]; index: numb
     videoRef.current.muted = muted;
   }, [muted]);
 
+  // Safari: force first frame to render (seek to 0.001s after metadata loads)
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const onMeta = () => {
+      video.currentTime = 0.001;
+    };
+    video.addEventListener("loadedmetadata", onMeta);
+    // Trigger load explicitly for Safari
+    video.load();
+    return () => video.removeEventListener("loadedmetadata", onMeta);
+  }, []);
+
   const handleMouseEnter = () => {
     setHovered(true);
     videoRef.current?.play().catch(() => {});
   };
   const handleMouseLeave = () => {
     setHovered(false);
-    if (videoRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0; }
+    if (videoRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0.001; }
   };
 
   return (
@@ -77,7 +90,7 @@ function WorkCard({ project, index }: { project: typeof projects[0]; index: numb
       dragTransition={{ power: 0.3, restDelta: 0.001 }}
     >
       <div className="aspect-[4/3] relative bg-white/5">
-        <video ref={videoRef} src={project.video} muted={muted} loop playsInline preload="metadata" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]" />
+        <video ref={videoRef} src={project.video} muted loop playsInline preload="auto" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]" />
 
         <button
           type="button"

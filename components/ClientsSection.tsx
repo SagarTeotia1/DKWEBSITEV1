@@ -1,157 +1,205 @@
-﻿"use client";
+"use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useRef, useState } from "react";
+import Image from "next/image";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 
 type Client = {
   name: string;
-  display: string;
-  color: string;
-  font: string;
-  weight: number;
-  size: string;
-  tracking: string;
-  transform: string;
-  bg: string | null;
-  icon?: string;
-  iconColor?: string;
+  file: string;
+  lightBg?: boolean;
 };
 
 const clients: Client[] = [
-  // Row 1
-  { name: "Swiggy",    display: "swiggy",    color: "#ffffff", font: "var(--font-dm-sans)",  weight: 800, size: "0.78rem", tracking: "-0.01em", transform: "none",      bg: "#FC8019" },
-  { name: "Nykaa",     display: "Nykaa",     color: "#f8e0ee", font: "var(--font-playfair)", weight: 700, size: "0.95rem", tracking: "0.02em",  transform: "none",      bg: null },
-  { name: "boAt",      display: "boAt",      color: "#e8e8e8", font: "var(--font-dm-sans)",  weight: 900, size: "0.9rem",  tracking: "-0.04em", transform: "none",      bg: null },
-  { name: "Mamaearth", display: "Mamaearth", color: "#8fce4a", font: "var(--font-dm-sans)",  weight: 700, size: "0.72rem", tracking: "-0.01em", transform: "none",      bg: null },
-  // Row 2
-  { name: "SUGAR",     display: "SUGAR",     color: "#e8356d", font: "var(--font-dm-sans)",  weight: 900, size: "0.85rem", tracking: "0.08em",  transform: "uppercase", bg: null },
-  { name: "Zomato",    display: "zomato",    color: "#e23744", font: "var(--font-dm-sans)",  weight: 800, size: "0.85rem", tracking: "-0.02em", transform: "none",      bg: null },
-  { name: "Lenskart",  display: "lenskart",  color: "#00bcd4", font: "var(--font-dm-sans)",  weight: 700, size: "0.78rem", tracking: "-0.01em", transform: "none",      bg: null },
-  { name: "NOISE",     display: "NOISE",     color: "#e8e8e8", font: "var(--font-dm-sans)",  weight: 900, size: "0.85rem", tracking: "0.1em",   transform: "uppercase", bg: null },
-  // Row 3
-  { name: "Nikon",     display: "Nikon",     color: "#111111", font: "var(--font-dm-sans)",  weight: 900, size: "0.8rem",  tracking: "-0.02em", transform: "none",      bg: "#f5c500" },
-  { name: "BRIDES",    display: "BRIDES",    color: "#f0ebe0", font: "var(--font-playfair)", weight: 700, size: "0.78rem", tracking: "0.12em",  transform: "uppercase", bg: null },
-  { name: "BAZAAR",    display: "BAZAAR",    color: "#f0ebe0", font: "var(--font-playfair)", weight: 400, size: "0.8rem",  tracking: "0.1em",   transform: "uppercase", bg: null },
-  { name: "Adobe",     display: "Adobe",     color: "#f0ebe0", font: "var(--font-dm-sans)",  weight: 400, size: "0.82rem", tracking: "0em",     transform: "none",      bg: null, icon: "▲", iconColor: "#FA0F00" },
-  // Row 4
-  { name: "SONY",      display: "SONY",      color: "#f0ebe0", font: "var(--font-dm-sans)",  weight: 900, size: "0.9rem",  tracking: "0.06em",  transform: "uppercase", bg: null },
-  { name: "SINGER",    display: "SINGER",    color: "#e03030", font: "var(--font-dm-sans)",  weight: 900, size: "0.85rem", tracking: "0.06em",  transform: "uppercase", bg: null },
-  { name: "Hyundai",   display: "HYUNDAI",   color: "#003087", font: "var(--font-dm-sans)",  weight: 900, size: "0.68rem", tracking: "0.06em",  transform: "uppercase", bg: "#f0ebe0" },
-  { name: "SAMSUNG",   display: "SAMSUNG",   color: "#1428A0", font: "var(--font-dm-sans)",  weight: 700, size: "0.7rem",  tracking: "0.04em",  transform: "uppercase", bg: "#f0ebe0" },
+  { name: "Astrotalk",          file: "ASTROTALK%20LOGO.png" },
+  { name: "Keventers",          file: "keventers.png" },
+  { name: "Vahaflix",           file: "vahaflix.PNG" },
+  { name: "Wellbeing Nutrition",file: "Wellbeing%20nutriton.png" },
+  { name: "MicroKahani",        file: "MicroKAhani%20logo%20DKWEBSite.png" },
+  { name: "Shaadi.com",         file: "shaadi.com.PNG" },
+  { name: "Stage",              file: "StageLogo.PNG" },
+  { name: "The Indus Valley",   file: "The%20Indus%20Valley.PNG" },
+  { name: "Viralo",             file: "VIRALO%20LOGO.JPG",    lightBg: true },
+  { name: "Athrox",             file: "athrox.JPG",           lightBg: true },
+  { name: "GoGoGo",             file: "GoGoGo%20logo.JPG",    lightBg: true },
+  { name: "Crafto",             file: "crafto.jpg",           lightBg: true },
+  { name: "BJP",                file: "BJP.JPG",              lightBg: true },
+  { name: "Government",         file: "Goverment.JPG",        lightBg: true },
+  { name: "PolicyBazaar",       file: "Policy%20baazaar.JPG", lightBg: true },
+  { name: "TipTop",             file: "TIPTOPLOGO.JPG",       lightBg: true },
 ];
+
+// mobile shows first 6 initially (2 rows × 3 cols)
+const MOBILE_INITIAL = 6;
 
 export default function ClientsSection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-8%" });
+  const [expanded, setExpanded] = useState(false);
 
   return (
     <section ref={ref} className="relative bg-[#0a0a0a] z-20 overflow-hidden">
 
-      {/* Headline block */}
-      <div className="px-6 md:px-16 lg:px-24 pt-28 md:pt-36 pb-20 md:pb-24 text-center">
+      {/* ambient glow */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 50% at 50% 40%, rgba(201,168,76,0.04) 0%, transparent 70%)",
+        }}
+      />
+
+      {/* ── Heading ── */}
+      <div className="text-center px-6 pt-28 md:pt-36 mb-12 md:mb-16">
         <motion.p
-          className="mb-6 inline-flex items-center gap-3 text-[9px] tracking-[0.55em] uppercase text-[#c9a84c]"
+          className="inline-flex items-center gap-3 mb-5 text-[9px] tracking-[0.55em] uppercase text-[#c9a84c]"
           style={{ fontFamily: "var(--font-dm-sans)" }}
           initial={{ opacity: 0, y: 10 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
           <span className="w-5 h-px bg-[#c9a84c]" />
           Our Clients
           <span className="w-5 h-px bg-[#c9a84c]" />
         </motion.p>
 
+        <motion.h2
+          style={{
+            fontFamily: "var(--font-playfair)",
+            fontSize: "clamp(2.2rem, 4.5vw, 3.75rem)",
+            lineHeight: 1.1,
+            letterSpacing: "-0.025em",
+            color: "#f0ebe0",
+          }}
+          initial={{ opacity: 0, y: 18 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.75, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+        >
+          Brands that trust us
+        </motion.h2>
 
+        <motion.p
+          className="mt-4 text-[#666] text-sm tracking-wide"
+          style={{ fontFamily: "var(--font-dm-sans)" }}
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.7, delay: 0.25 }}
+        >
+          50+ brands across India
+        </motion.p>
       </div>
 
-      {/* Thin divider */}
-      <motion.div
-        className="mx-6 md:mx-16 lg:mx-24 h-px bg-white/[0.07]"
-        initial={{ scaleX: 0, opacity: 0 }}
-        animate={inView ? { scaleX: 1, opacity: 1 } : {}}
-        style={{ transformOrigin: "left" }}
-        transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-      />
+      {/* ── Logo grid ── */}
+      <div className="max-w-5xl mx-auto px-4 md:px-10">
 
-      {/* Logo grid */}
-      <div className="grid grid-cols-4 mx-6 md:mx-16 lg:mx-24 mb-24 md:mb-32">
-        {clients.map((client, i) => {
-          const row = Math.floor(i / 4);
-          const col = i % 4;
+        {/* desktop: all 16 always visible */}
+        <div className="hidden md:grid md:grid-cols-4">
+          {clients.map((client, i) => (
+            <LogoCell key={i} client={client} index={i} inView={inView} cols={4} />
+          ))}
+        </div>
 
-          return (
-            <motion.div
-              key={i}
-              className="flex items-center justify-center py-10 md:py-14 px-6 group"
-              initial={{ opacity: 0, y: 12 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              whileHover={{ y: -3 }}
-              transition={{
-                duration: 0.6,
-                delay: 0.45 + row * 0.12 + col * 0.05,
-                ease: [0.22, 1, 0.36, 1],
-              }}
+        {/* mobile: 3 cols, first 6 visible then expand */}
+        <div className="grid grid-cols-3 md:hidden">
+          {clients.slice(0, MOBILE_INITIAL).map((client, i) => (
+            <LogoCell key={i} client={client} index={i} inView={inView} cols={3} />
+          ))}
+
+          <AnimatePresence>
+            {expanded &&
+              clients.slice(MOBILE_INITIAL).map((client, i) => (
+                <LogoCell
+                  key={MOBILE_INITIAL + i}
+                  client={client}
+                  index={MOBILE_INITIAL + i}
+                  inView={inView}
+                  cols={3}
+                  fromExpand
+                />
+              ))}
+          </AnimatePresence>
+        </div>
+
+        {/* See more button — mobile only */}
+        {!expanded && (
+          <motion.div
+            className="flex justify-center mt-6 md:hidden"
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.5, delay: 0.8 }}
+          >
+            <button
+              onClick={() => setExpanded(true)}
+              className="group flex items-center gap-2.5 px-7 py-3 rounded-full border border-white/10 text-[11px] tracking-[0.22em] uppercase text-white/50 hover:text-white hover:border-white/25 transition-all duration-300"
+              style={{ fontFamily: "var(--font-dm-sans)" }}
             >
-              {client.bg ? (
-                <span
-                  className="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 select-none"
-                  style={{ background: client.bg }}
-                >
-                  {client.icon && (
-                    <span style={{ color: client.iconColor, fontSize: "0.85em", lineHeight: 1 }}>
-                      {client.icon}
-                    </span>
-                  )}
-                  <span
-                    style={{
-                      fontFamily: client.font,
-                      fontWeight: client.weight,
-                      fontSize: client.size,
-                      letterSpacing: client.tracking,
-                      textTransform: client.transform as React.CSSProperties["textTransform"],
-                      color: client.color,
-                      lineHeight: 1,
-                    }}
-                  >
-                    {client.display}
-                  </span>
-                </span>
-              ) : (
-                <span
-                  className="select-none text-center"
-                  style={{
-                    fontFamily: client.font,
-                    fontWeight: client.weight,
-                    fontSize: client.size,
-                    letterSpacing: client.tracking,
-                    textTransform: client.transform as React.CSSProperties["textTransform"],
-                    color: client.color,
-                    lineHeight: 1,
-                    opacity: 0.8,
-                  }}
-                >
-                  {client.icon && (
-                    <span style={{ color: client.iconColor, marginRight: "3px" }}>{client.icon}</span>
-                  )}
-                  {client.display}
-                </span>
-              )}
-            </motion.div>
-          );
-        })}
+              See all clients
+              <svg
+                className="w-3 h-3 transition-transform duration-300 group-hover:translate-y-0.5"
+                viewBox="0 0 12 12"
+                fill="none"
+              >
+                <path d="M6 1v10M1 6l5 5 5-5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </motion.div>
+        )}
       </div>
 
-      {/* Bottom label */}
-      <motion.p
-        className="pb-16 text-center text-[9px] tracking-[0.5em] uppercase text-white/20"
-        style={{ fontFamily: "var(--font-dm-sans)" }}
-        initial={{ opacity: 0 }}
-        animate={inView ? { opacity: 1 } : {}}
-        transition={{ duration: 0.8, delay: 1.3 }}
-      >
-        Trusted by 120+ brands across India
-      </motion.p>
+      <div className="pb-24 md:pb-32" />
 
     </section>
+  );
+}
+
+/* ── Logo cell ── */
+function LogoCell({
+  client,
+  index,
+  inView,
+  cols,
+  fromExpand = false,
+}: {
+  client: Client;
+  index: number;
+  inView: boolean;
+  cols: number;
+  fromExpand?: boolean;
+}) {
+  const row = Math.floor(index / cols);
+  const col = index % cols;
+
+  return (
+    <motion.div
+      className="flex items-center justify-center py-7 px-3 md:py-10 md:px-5 group cursor-default"
+      initial={{ opacity: 0, y: fromExpand ? 10 : 14 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      exit={{ opacity: 0, y: 6 }}
+      transition={{
+        duration: fromExpand ? 0.35 : 0.5,
+        delay: fromExpand ? (index - 6) * 0.04 : 0.3 + row * 0.08 + col * 0.04,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+    >
+      <motion.div
+        whileHover={{ scale: 1.08, y: -3 }}
+        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+        className={[
+          "relative transition-all duration-300",
+          client.lightBg
+            ? "rounded-md overflow-hidden brightness-95 group-hover:brightness-110"
+            : "brightness-90 group-hover:brightness-125",
+        ].join(" ")}
+        style={{ width: "120px", height: "52px" }}
+      >
+        <Image
+          src={`/assets/clients/${client.file}`}
+          alt={client.name}
+          fill
+          className="object-contain"
+          sizes="(max-width: 768px) 33vw, 20vw"
+        />
+      </motion.div>
+    </motion.div>
   );
 }

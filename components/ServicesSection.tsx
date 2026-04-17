@@ -81,11 +81,13 @@ interface CardProps {
   index: number;
   total: number;
   scrollYProgress: MotionValue<number>;
+  isActive: boolean;
 }
 
-function ServiceCard({ service, index, total, scrollYProgress }: CardProps) {
+function ServiceCard({ service, index, total, scrollYProgress, isActive }: CardProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [muted, setMuted] = useState(true);
+  const [muted,     setMuted]     = useState(true);
+  const [buffering, setBuffering] = useState(true);
   const N = total;
   const seg = 1 / N;
 
@@ -139,10 +141,41 @@ function ServiceCard({ service, index, total, scrollYProgress }: CardProps) {
   );
   const filter = useMotionTemplate`brightness(${brightnessVal}) saturate(${saturateVal})`;
 
+  // Play/pause based on which card is active
   useEffect(() => {
-    if (!videoRef.current) return;
-    videoRef.current.muted = muted;
-  }, [muted]);
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = muted;
+    if (isActive) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  }, [isActive, muted]);
+
+  // Keep-alive + buffering events (only while active)
+  useEffect(() => {
+    if (!isActive) return;
+    const video = videoRef.current;
+    if (!video) return;
+
+    setBuffering(true); // show spinner when this card becomes active
+
+    const onWait    = () => setBuffering(true);
+    const onPlaying = () => setBuffering(false);
+    video.addEventListener("waiting", onWait);
+    video.addEventListener("playing", onPlaying);
+
+    const t = setInterval(() => {
+      if (video.paused && !video.ended) video.play().catch(() => {});
+    }, 800);
+
+    return () => {
+      clearInterval(t);
+      video.removeEventListener("waiting", onWait);
+      video.removeEventListener("playing", onPlaying);
+    };
+  }, [isActive]);
 
   return (
     <motion.div
@@ -163,12 +196,20 @@ function ServiceCard({ service, index, total, scrollYProgress }: CardProps) {
           <video
             ref={videoRef}
             src={service.video}
-            autoPlay
             muted={muted}
             loop
             playsInline
+            preload="auto"
             className="w-full h-full object-cover"
           />
+
+          {/* Buffering spinner */}
+          {buffering && isActive && (
+            <div className="absolute inset-0 z-[20] flex items-center justify-center pointer-events-none">
+              <div className="w-10 h-10 rounded-full border-2 border-white/10 border-t-[#c9a84c] animate-spin" />
+            </div>
+          )}
+
           <button
             type="button"
             onClick={() => setMuted((prev) => !prev)}
@@ -446,6 +487,7 @@ export default function ServicesSection() {
                 index={i}
                 total={SERVICES.length}
                 scrollYProgress={scrollYProgress}
+                isActive={i === activeIndex}
               />
             ))}
           </div>

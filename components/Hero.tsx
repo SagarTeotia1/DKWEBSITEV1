@@ -107,8 +107,9 @@ function StackedTitle({ ready }: { ready: boolean }) {
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [muted, setMuted] = useState(true);
-  const [ready, setReady] = useState(false);
+  const [muted,     setMuted]     = useState(true);
+  const [ready,     setReady]     = useState(false);
+  const [buffering, setBuffering] = useState(true);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -124,7 +125,26 @@ export default function Hero() {
   }, []);
 
   useEffect(() => {
-    videoRef.current?.play().catch(() => {});
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.play().catch(() => {});
+
+    const onWait    = () => setBuffering(true);
+    const onPlaying = () => setBuffering(false);
+    video.addEventListener("waiting", onWait);
+    video.addEventListener("playing", onPlaying);
+
+    // keep-alive — some browsers suspend background video
+    const t = setInterval(() => {
+      if (video.paused && !video.ended) video.play().catch(() => {});
+    }, 1000);
+
+    return () => {
+      clearInterval(t);
+      video.removeEventListener("waiting", onWait);
+      video.removeEventListener("playing", onPlaying);
+    };
   }, []);
 
   const toggleMute = () => {
@@ -164,6 +184,13 @@ export default function Hero() {
           </motion.div>
 
 
+
+          {/* Buffering spinner */}
+          {buffering && (
+            <div className="absolute inset-0 z-[4] flex items-center justify-center pointer-events-none">
+              <div className="w-12 h-12 rounded-full border-2 border-white/10 border-t-[#c9a84c] animate-spin" />
+            </div>
+          )}
 
           {/* ── Stacked title (parallax) ── */}
           <motion.div
