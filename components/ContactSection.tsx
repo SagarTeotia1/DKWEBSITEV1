@@ -60,7 +60,7 @@ export default function ContactSection() {
               animate={inView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.6 }}
             >
-              Let's Talk
+              Let&apos;s Talk
             </motion.p>
 
             <motion.h2
@@ -83,7 +83,7 @@ export default function ContactSection() {
               animate={inView ? { opacity: 1 } : {}}
               transition={{ delay: 0.4 }}
             >
-              Have a story worth telling? We'd love to hear about your project.
+              Have a story worth telling? We&apos;d love to hear about your project.
               Drop us the details and our team will be in touch within 24 hours.
             </motion.p>
 
@@ -172,7 +172,7 @@ export default function ContactSection() {
                 >
                   Message Sent.
                 </h3>
-                <p className="text-sm text-cream/40">We'll be in touch within 24 hours.</p>
+                <p className="text-sm text-cream/40">We&apos;ll be in touch within 24 hours.</p>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col gap-10" noValidate>
