@@ -130,7 +130,7 @@ function ReelItem({ project, index, total }: { project: Project; index: number; 
       className="relative w-full flex-shrink-0 bg-black"
       style={{ height: "100svh", scrollSnapAlign: "start" }}
     >
-      <video ref={videoRef} src={project.src} muted loop playsInline preload="auto"
+      <video ref={videoRef} src={project.src} muted loop playsInline preload="metadata"
         className="absolute inset-0 w-full h-full object-cover" />
 
       {/* tap zone */}
@@ -243,10 +243,22 @@ function GridCard({ project, index }: { project: Project; index: number }) {
   const [playing,   setPlaying]   = useState(false);
   const [muted,     setMuted]     = useState(true);
   const [buffering, setBuffering] = useState(false);
+  const [inViewport, setInViewport] = useState(false);
+
+  // Only load video when card enters viewport — prevents 6 simultaneous network requests on mount
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setInViewport(true); obs.disconnect(); }
+    }, { rootMargin: "200px" });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || !inViewport) return;
     const onMeta   = () => { video.currentTime = 0.001; };
     const onWait   = () => setBuffering(true);
     const onResume = () => setBuffering(false);
@@ -254,14 +266,13 @@ function GridCard({ project, index }: { project: Project; index: number }) {
     video.addEventListener("waiting",        onWait);
     video.addEventListener("playing",        onResume);
     video.addEventListener("canplay",        onResume);
-    video.load();
     return () => {
       video.removeEventListener("loadedmetadata", onMeta);
       video.removeEventListener("waiting",        onWait);
       video.removeEventListener("playing",        onResume);
       video.removeEventListener("canplay",        onResume);
     };
-  }, []);
+  }, [inViewport]);
 
   useEffect(() => { if (videoRef.current) videoRef.current.muted = muted; }, [muted]);
 
@@ -277,8 +288,12 @@ function GridCard({ project, index }: { project: Project; index: number }) {
       className="group relative rounded-2xl overflow-hidden bg-[#111] cursor-pointer"
       style={{ aspectRatio: "9/16" }}
     >
-      <video ref={videoRef} src={project.src} muted loop playsInline preload="auto"
-        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+      <video
+        ref={videoRef}
+        src={inViewport ? project.src : undefined}
+        muted loop playsInline preload="metadata"
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+      />
 
       <button type="button" onClick={(e) => { e.stopPropagation(); setMuted((p) => !p); }}
         className="absolute bottom-4 right-4 z-[3] w-9 h-9 rounded-full bg-[#3f434c]/90 border border-white/10 flex items-center justify-center text-[#d7dbe2] hover:bg-[#4a4f5a] transition-colors"
@@ -346,11 +361,6 @@ export default function WorkPage() {
           MOBILE — Instagram Reels (hidden on md+)
       ══════════════════════════════════════════════════════════════════ */}
       <div className="md:hidden relative bg-black" style={{ height: "100svh", overflow: "hidden" }}>
-
-        {/* off-screen preload */}
-        <div aria-hidden="true" style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", opacity: 0, pointerEvents: "none", top: -9999, left: -9999 }}>
-          {projects.map((p) => <video key={p.id} src={p.src} preload="auto" muted playsInline />)}
-        </div>
 
         {/* floating filter bar */}
         <div className="absolute bottom-0 left-0 right-0 z-50">

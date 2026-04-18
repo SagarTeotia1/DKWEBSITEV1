@@ -1,14 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import AboutSection from "@/components/AboutSection";
-import ClientsSection from "@/components/ClientsSection";
-import ReelSection from "@/components/ReelSection";
-import ServicesSection from "@/components/ServicesSection";
-import Footer from "@/components/Footer";
 import Preloader from "@/components/Preloader";
+
+const AboutSection    = dynamic(() => import("@/components/AboutSection"),    { ssr: false });
+const ClientsSection  = dynamic(() => import("@/components/ClientsSection"),  { ssr: false });
+const ReelSection     = dynamic(() => import("@/components/ReelSection"),     { ssr: false });
+const ServicesSection = dynamic(() => import("@/components/ServicesSection"), { ssr: false });
+const Footer          = dynamic(() => import("@/components/Footer"),          { ssr: false });
+
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
 

@@ -204,7 +204,7 @@ function Card({
           loop
           playsInline
           autoPlay
-          preload="auto"
+          preload="metadata"
           controls={false}
           className="absolute inset-0 w-full h-full object-cover"
         />
@@ -392,16 +392,6 @@ export default function ReelSection() {
       id="reel"
       className="relative bg-[#0a0a0a] z-20 overflow-hidden"
     >
-      {/* Preload all videos — positioned off-screen, NOT display:none (Safari ignores hidden) */}
-      <div
-        aria-hidden="true"
-        style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", opacity: 0, pointerEvents: "none", top: -9999, left: -9999 }}
-      >
-        {reels.map((r) => (
-          <video key={r.id} src={r.src} preload="auto" muted playsInline />
-        ))}
-      </div>
-
       <div className="h-px mx-6 md:mx-16 bg-white/[0.06]" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-16 lg:px-20 py-20 md:py-28 lg:py-32">
