@@ -4,12 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useInView, AnimatePresence, LayoutGroup } from "framer-motion";
 
 const projects = [
-  { id: 1, title: "Lumière Jewels", category: "Brand Commercial", year: "2024", duration: "0:90", video: "https://videos.pexels.com/video-files/3571264/3571264-sd_640_360_30fps.mp4", featured: true },
-  { id: 2, title: "Nakshatra Couture", category: "Fashion Film", year: "2024", duration: "2:15", video: "https://videos.pexels.com/video-files/855370/855370-sd_640_360_25fps.mp4", featured: false },
-  { id: 3, title: "Arya Spirits", category: "Product Commercial", year: "2023", duration: "0:45", video: "https://videos.pexels.com/video-files/6990394/6990394-sd_640_360_24fps.mp4", featured: false },
-  { id: 4, title: "Horizon Realty", category: "Corporate Film", year: "2023", duration: "3:30", video: "https://videos.pexels.com/video-files/18675658/18675658-sd_640_360_30fps.mp4", featured: false },
-  { id: 5, title: "Zephyr Fragrances", category: "Digital Content", year: "2023", duration: "1:00", video: "https://videos.pexels.com/video-files/6990393/6990393-sd_640_360_24fps.mp4", featured: false },
-  { id: 6, title: "Indus Heritage", category: "Documentary", year: "2022", duration: "12:00", video: "https://videos.pexels.com/video-files/855369/855369-sd_640_360_25fps.mp4", featured: false },
+  { id: 1, title: "Insta Queen", category: "Brand Commercial", year: "2024", duration: "1:00", video: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/Instaqueen%20trailer.MP4", featured: true },
+  { id: 2, title: "Mera Husband", category: "Fashion Film", year: "2023", duration: "1:00", video: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/Mera%20Husband%20Trailer%20.mp4", featured: false },
+  { id: 3, title: "Wellbeing", category: "Product Commercial", year: "2024", duration: "1:00", video: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/Wellbeing%20Ad%20.mp4", featured: false },
+  { id: 4, title: "Wellbeing", category: "Corporate Film", year: "2023", duration: "1:00", video: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/Wellbeing%20Ad1.mp4", featured: false },
+  { id: 5, title: "Keventers", category: "Documentary", year: "2023", duration: "1:00", video: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/keventers.mp4", featured: false },
+  { id: 6, title: "Astrotalk", category: "Digital Content", year: "2024", duration: "1:00", video: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/Astrotalk%20shadi1.mp4", featured: false },
 ];
 
 const categories = ["All", "Brand Commercial", "Fashion Film", "Product Commercial", "Corporate Film", "Digital Content", "Documentary"];

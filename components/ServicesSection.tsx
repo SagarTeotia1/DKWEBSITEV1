@@ -122,13 +122,16 @@ function ServiceVisual({ service }: { service: (typeof SERVICES)[number] }) {
           style={{ background: "rgba(201,169,110,0.3)" }}
         />
         <p
-          className="text-center"
+          className="text-center px-4 py-1.5 rounded-full border border-gold/20"
           style={{
-            fontFamily: "var(--font-playfair)",
-            fontStyle: "italic",
-            fontSize: "clamp(0.7rem, 1vw, 0.9rem)",
-            color: "rgba(201,169,110,0.35)",
-            letterSpacing: "0.04em",
+            fontFamily: "var(--font-dm-sans)",
+            fontWeight: 500,
+            textTransform: "uppercase",
+            fontSize: "clamp(0.62rem, 0.78vw, 0.72rem)",
+            color: "rgba(201,169,110,0.68)",
+            letterSpacing: "0.28em",
+            background:
+              "linear-gradient(180deg, rgba(201,169,110,0.12), rgba(201,169,110,0.02))",
           }}
         >
           {service.tagline}
@@ -285,10 +288,13 @@ function ServiceSlide({
 
             {/* Tagline */}
             <p
-              className="text-gold/50 italic mb-6 md:mb-8"
+              className="text-gold/75 mb-6 md:mb-8 uppercase"
               style={{
-                fontFamily: "var(--font-playfair)",
-                fontSize: "clamp(0.85rem, 1.05vw, 0.95rem)",
+                fontFamily: "var(--font-dm-sans)",
+                fontWeight: 500,
+                fontSize: "clamp(0.64rem, 0.86vw, 0.76rem)",
+                letterSpacing: "0.24em",
+                textShadow: "0 0 16px rgba(201,169,110,0.2)",
               }}
             >
               {service.tagline}

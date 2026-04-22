@@ -20,12 +20,12 @@ type Reel = {
 };
 
 const reels: Reel[] = [
-  { id: 1, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/videos/1776371219480-d1dd6a9f-69e9-4194-9254-24d1710d3329.MP4", title: "InstaQueen",   client: "InstaQueen",  category: "Brand Commercial", year: "2024" },
-  { id: 2, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/videos/1776371534571-380273bc-5588-4f3a-808b-6f51adef68ba.mp4", title: "Mera Husband", client: "Mera Husband", category: "Fashion Film",     year: "2023" },
-  { id: 3, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/videos/1776371344512-7bc45299-d1f8-4973-8f0a-a6473cc99f92.mp4", title: "Wellbing",     client: "Wellbing",    category: "Product Film",     year: "2024" },
-  { id: 4, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/videos/1776371711317-918364ec-ffb2-4e8e-ad79-e012af08a3cf.mp4", title: "Weellbeing",   client: "Weellbeing",  category: "Makeup Film",      year: "2023" },
-  { id: 5, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/videos/1776371876694-f0309dd5-635a-4a17-9cc3-8a696b6f3168.mp4", title: "Astrotalk",    client: "Astrotalk",   category: "Digital Content",  year: "2024" },
-  { id: 6, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/videos/1776372090831-bc5f1238-f161-4d19-adf4-f02a22321508.mp4", title: "Keventers",    client: "Keventers",   category: "Social Content",   year: "2023" },
+  { id: 1, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/Instaqueen%20trailer.MP4", title: "Insta Queen", client: "Micro Drama", category: "Brand Commercial", year: "2024" },
+  { id: 2, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/Mera%20Husband%20Trailer%20.mp4", title: "Mera Husband", client: "Micro Drama", category: "Fashion Film", year: "2023" },
+  { id: 3, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/Wellbeing%20Ad%20.mp4", title: "Wellbeing", client: "Wellbeing", category: "Product Film", year: "2024" },
+  { id: 4, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/Wellbeing%20Ad1.mp4", title: "Wellbeing", client: "Wellbeing", category: "Makeup Film", year: "2023" },
+  { id: 5, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/keventers.mp4", title: "Keventers", client: "Keventers", category: "Social Content", year: "2023" },
+  { id: 6, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/Astrotalk%20shadi1.mp4", title: "Astrotalk", client: "Astrotalk", category: "Digital Content", year: "2024" },
 ];
 
 // ── Card ─────────────────────────────────────────────────────────────────────
