@@ -26,10 +26,9 @@ function StackedTitle({ ready }: { ready: boolean }) {
       <div className="flex items-baseline gap-[0.3em] md:gap-[0.42em]">
         <div className="overflow-hidden pb-[0.15em]">
           <motion.span
-            className="block select-none text-cream/90"
+            className="block select-none text-cream/90 text-[clamp(2.475rem,8vw,7.5rem)] md:text-[clamp(2.6rem,8vw,7.5rem)]"
             style={{
               fontFamily: "var(--font-dm-sans)",
-              fontSize: "clamp(2.6rem, 8vw, 7.5rem)",
               letterSpacing: "0.06em",
               fontWeight: 300,
               lineHeight: 1,
@@ -44,10 +43,9 @@ function StackedTitle({ ready }: { ready: boolean }) {
 
         <div className="overflow-hidden pb-[0.15em]">
           <motion.span
-            className="block select-none text-gold italic"
+            className="block select-none text-gold italic text-[clamp(2.475rem,8vw,7.5rem)] md:text-[clamp(2.6rem,8vw,7.5rem)]"
             style={{
               fontFamily: "var(--font-playfair)",
-              fontSize: "clamp(2.6rem, 8vw, 7.5rem)",
               fontWeight: 700,
               letterSpacing: "-0.02em",
               lineHeight: 1,

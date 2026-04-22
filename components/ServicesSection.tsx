@@ -396,7 +396,7 @@ export default function ServicesSection() {
   return (
     <section
       id="services"
-      className="relative py-14 md:py-20"
+      className="relative bg-[#0a0a0a] pt-0 pb-14 md:pb-20"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
