@@ -1,13 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
+  AnimatePresence,
   motion,
-  useScroll,
-  useTransform,
-  useMotionValueEvent,
-  useMotionTemplate,
-  type MotionValue,
 } from "framer-motion";
 
 const SERVICES = [
@@ -17,8 +13,6 @@ const SERVICES = [
     tagline: "Narratives that move people",
     description:
       "Brand stories and emotional campaigns that forge authentic connections. We craft visual narratives that linger long after the screen goes dark.",
-    video:
-      "https://videos.pexels.com/video-files/3571264/3571264-sd_640_360_30fps.mp4",
   },
   {
     number: "02",
@@ -26,8 +20,6 @@ const SERVICES = [
     tagline: "Short. Sharp. Unforgettable.",
     description:
       "Serialised short-form dramatic content engineered for social platforms. High-concept stories in compact formats that demand to be rewatched.",
-    video:
-      "https://videos.pexels.com/video-files/855370/855370-sd_640_360_25fps.mp4",
   },
   {
     number: "03",
@@ -35,8 +27,6 @@ const SERVICES = [
     tagline: "Broadcast quality. Every frame.",
     description:
       "Television commercials built with cinematic precision. From concept to colour grade, we create spots that captivate mass audiences and drive action.",
-    video:
-      "https://videos.pexels.com/video-files/6990394/6990394-sd_640_360_24fps.mp4",
   },
   {
     number: "04",
@@ -44,8 +34,6 @@ const SERVICES = [
     tagline: "Art with intention.",
     description:
       "Award-worthy short films that showcase vision, talent, and craft. Stories told with economy and impact — every second earns its place.",
-    video:
-      "https://videos.pexels.com/video-files/18675658/18675658-sd_640_360_30fps.mp4",
   },
   {
     number: "05",
@@ -53,8 +41,6 @@ const SERVICES = [
     tagline: "Truth, beautifully told.",
     description:
       "In-depth documentary productions exploring real stories with cinematic depth. Journalistic rigour meets visual artistry.",
-    video:
-      "https://videos.pexels.com/video-files/6990393/6990393-sd_640_360_24fps.mp4",
   },
   {
     number: "06",
@@ -62,8 +48,6 @@ const SERVICES = [
     tagline: "Authentic. Scalable. Effective.",
     description:
       "User-generated-style content that feels native to the platform. Raw authenticity, strategic intent — the kind of content people actually share.",
-    video:
-      "https://videos.pexels.com/video-files/855369/855369-sd_640_360_25fps.mp4",
   },
   {
     number: "07",
@@ -71,171 +55,183 @@ const SERVICES = [
     tagline: "Real voices. Real impact.",
     description:
       "Street-style interviews and opinion captures that surface genuine reactions. Social proof in its most credible, compelling form.",
-    video:
-      "https://videos.pexels.com/video-files/7622850/7622850-sd_640_360_30fps.mp4",
   },
 ];
 
-interface CardProps {
+/* ── Decorative right panel ── */
+function ServiceVisual({ service }: { service: (typeof SERVICES)[number] }) {
+  return (
+    <div className="w-full h-full relative flex items-center justify-center overflow-hidden select-none">
+
+      {/* Ambient radial glow */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 70% at 55% 50%, rgba(201,169,110,0.09) 0%, transparent 68%)",
+        }}
+      />
+
+      {/* Horizontal scan lines — 5 thin rules */}
+      {[18, 34, 50, 66, 82].map((top) => (
+        <div
+          key={top}
+          className="absolute left-0 right-0 h-px pointer-events-none"
+          style={{
+            top: `${top}%`,
+            background:
+              "linear-gradient(90deg, transparent, rgba(201,169,110,0.06) 20%, rgba(201,169,110,0.06) 80%, transparent)",
+          }}
+        />
+      ))}
+
+      {/* Vertical accent line — left edge */}
+      <div
+        className="absolute top-8 bottom-8 w-px left-8 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(180deg, transparent, rgba(201,169,110,0.18) 30%, rgba(201,169,110,0.18) 70%, transparent)",
+        }}
+      />
+
+      {/* Giant number */}
+      <div
+        className="absolute pointer-events-none leading-none"
+        aria-hidden="true"
+        style={{
+          fontFamily: "var(--font-playfair)",
+          fontWeight: 700,
+          fontStyle: "italic",
+          fontSize: "clamp(9rem, 22vw, 20rem)",
+          letterSpacing: "-0.05em",
+          background:
+            "linear-gradient(135deg, rgba(201,169,110,0.18) 0%, rgba(201,169,110,0.05) 60%, transparent 100%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+          userSelect: "none",
+        }}
+      >
+        {service.number}
+      </div>
+
+      {/* Tagline — centered below number */}
+      <div className="absolute bottom-10 left-8 right-8 flex flex-col items-center gap-2">
+        <div
+          className="h-px w-8"
+          style={{ background: "rgba(201,169,110,0.3)" }}
+        />
+        <p
+          className="text-center"
+          style={{
+            fontFamily: "var(--font-playfair)",
+            fontStyle: "italic",
+            fontSize: "clamp(0.7rem, 1vw, 0.9rem)",
+            color: "rgba(201,169,110,0.35)",
+            letterSpacing: "0.04em",
+          }}
+        >
+          {service.tagline}
+        </p>
+      </div>
+
+      {/* Corner ornaments — TR and BL only */}
+      <div
+        className="absolute top-5 right-5 w-5 h-5"
+        style={{
+          borderTop: "1px solid rgba(201,169,110,0.25)",
+          borderRight: "1px solid rgba(201,169,110,0.25)",
+        }}
+      />
+      <div
+        className="absolute bottom-5 left-5 w-5 h-5"
+        style={{
+          borderBottom: "1px solid rgba(201,169,110,0.25)",
+          borderLeft: "1px solid rgba(201,169,110,0.25)",
+        }}
+      />
+    </div>
+  );
+}
+
+/* ── Individual slide ── */
+interface SlideProps {
   service: (typeof SERVICES)[number];
   index: number;
   total: number;
-  scrollYProgress: MotionValue<number>;
-  isActive: boolean;
+  direction: number;
+  onSwipeNext: () => void;
+  onSwipePrev: () => void;
 }
 
-function ServiceCard({ service, index, total, scrollYProgress, isActive }: CardProps) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [muted,     setMuted]     = useState(true);
-  const [buffering, setBuffering] = useState(true);
-  const N = total;
-  const seg = 1 / N;
+function ServiceSlide({
+  service,
+  index,
+  total,
+  direction,
+  onSwipeNext,
+  onSwipePrev,
+}: SlideProps) {
+  const swipePower = (offset: number, velocity: number) => {
+    return Math.abs(offset) * velocity;
+  };
 
-  /*
-   * Animation timing — the key fix:
-   * Exit (scale + dim) starts only AFTER the next card has fully entered.
-   * This eliminates the bleed-through where a scaled-down card is visible
-   * around the edges of a partially-entered card.
-   *
-   * For card i:
-   *   entryStart = i*seg - seg*0.30   (slide begins slightly before its turn)
-   *   entryEnd   = i*seg + seg*0.12   (card fully settled)
-   *   exitStart  = entryEnd of card (i+1) = (i+1)*seg + seg*0.12
-   *   exitEnd    = exitStart + seg*0.25
-   *
-   * This guarantees a clean gap between entry completion and exit start.
-   */
-  const entryStart = Math.max(0, index * seg - seg * 0.3);
-  const entryEnd = index * seg + seg * 0.12;
-
-  const nextEntryEnd = (index + 1) * seg + seg * 0.12; // when next card finishes entering
-  const exitStart = nextEntryEnd;
-  const exitEnd = Math.min(1, exitStart + seg * 0.25);
-
-  const isLast = index === total - 1;
-
-  // Y — first card is always 0%; others slide up from 105%
-  const y = useTransform(
-    scrollYProgress,
-    index === 0 ? [0, 1] : [entryStart, entryEnd],
-    index === 0 ? ["0%", "0%"] : ["105%", "0%"]
-  );
-
-  // Scale — push back once NEXT card is fully in
-  const scale = useTransform(
-    scrollYProgress,
-    [exitStart, exitEnd],
-    [1, isLast ? 1 : 0.88]
-  );
-
-  // Brightness — aggressively dim when pushed back
-  const brightnessVal = useTransform(
-    scrollYProgress,
-    [exitStart, exitEnd],
-    [1, isLast ? 1 : 0.06]
-  );
-  const saturateVal = useTransform(
-    scrollYProgress,
-    [exitStart, exitEnd],
-    [1, isLast ? 1 : 0.3]
-  );
-  const filter = useMotionTemplate`brightness(${brightnessVal}) saturate(${saturateVal})`;
-
-  // Play/pause based on which card is active
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    video.muted = muted;
-    if (isActive) {
-      video.play().catch(() => {});
-    } else {
-      video.pause();
-    }
-  }, [isActive, muted]);
-
-  // Keep-alive + buffering events (only while active)
-  useEffect(() => {
-    if (!isActive) return;
-    const video = videoRef.current;
-    if (!video) return;
-
-    setBuffering(true); // show spinner when this card becomes active
-
-    const onWait    = () => setBuffering(true);
-    const onPlaying = () => setBuffering(false);
-    video.addEventListener("waiting", onWait);
-    video.addEventListener("playing", onPlaying);
-
-    const t = setInterval(() => {
-      if (video.paused && !video.ended) video.play().catch(() => {});
-    }, 800);
-
-    return () => {
-      clearInterval(t);
-      video.removeEventListener("waiting", onWait);
-      video.removeEventListener("playing", onPlaying);
-    };
-  }, [isActive]);
+  const swipeConfidenceThreshold = 8000;
 
   return (
     <motion.div
-      style={{ y, scale, filter, zIndex: index + 1 }}
+      key={service.number}
       className="absolute inset-0"
+      custom={direction}
+      variants={{
+        enter: (dir: number) => ({
+          x: dir > 0 ? 70 : -70,
+          opacity: 0,
+          scale: 0.98,
+        }),
+        center: {
+          x: 0,
+          opacity: 1,
+          scale: 1,
+        },
+        exit: (dir: number) => ({
+          x: dir > 0 ? -70 : 70,
+          opacity: 0,
+          scale: 0.98,
+        }),
+      }}
+      initial="enter"
+      animate="center"
+      exit="exit"
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      drag="x"
+      dragConstraints={{ left: 0, right: 0 }}
+      dragElastic={0.2}
+      onDragEnd={(_, info) => {
+        const swipe = swipePower(info.offset.x, info.velocity.x);
+
+        if (swipe < -swipeConfidenceThreshold) {
+          onSwipeNext();
+        } else if (swipe > swipeConfidenceThreshold) {
+          onSwipePrev();
+        }
+      }}
     >
       <div className="w-full h-full rounded-[1.75rem] md:rounded-[2rem] overflow-hidden relative bg-[#0d0d0d] border border-cream/[0.05] shadow-[0_48px_96px_rgba(0,0,0,0.85)]">
 
         {/* Gold top hairline */}
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent z-20" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/25 to-transparent z-20" />
 
-        {/* ── Video: right 56% on desktop, top 42% on mobile ── */}
+        {/* ── Right: visual panel ── */}
         <div
           className="absolute overflow-hidden
-            inset-x-0 top-0 h-[42%]
-            md:inset-y-0 md:right-0 md:h-auto md:w-[56%] md:left-auto"
+            hidden md:block
+            inset-y-0 right-0 w-[52%]"
         >
-          <video
-            ref={videoRef}
-            src={service.video}
-            muted={muted}
-            loop
-            playsInline
-            preload="auto"
-            className="w-full h-full object-cover"
-          />
+          <ServiceVisual service={service} />
 
-          {/* Buffering spinner */}
-          {buffering && isActive && (
-            <div className="absolute inset-0 z-[20] flex items-center justify-center pointer-events-none">
-              <div className="w-10 h-10 rounded-full border-2 border-white/10 border-t-[#c9a84c] animate-spin" />
-            </div>
-          )}
-
-          <button
-            type="button"
-            onClick={() => setMuted((prev) => !prev)}
-            aria-label={muted ? "Unmute video" : "Mute video"}
-            className="absolute bottom-4 right-4 z-[22] w-10 h-10 rounded-full bg-[#3f434c]/95 border border-white/10 flex items-center justify-center text-[#d7dbe2] hover:bg-[#4a4f5a] transition-colors duration-300"
-          >
-            {muted ? (
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M11 5 6 9H2v6h4l5 4V5z" />
-                <line x1="23" y1="9" x2="17" y2="15" />
-                <line x1="17" y1="9" x2="23" y2="15" />
-              </svg>
-            ) : (
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M11 5 6 9H2v6h4l5 4V5z" />
-                <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-                <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-              </svg>
-            )}
-          </button>
-          {/* Desktop: gradient bleeds left so text reads cleanly */}
-          <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-[#0d0d0d] via-[#0d0d0d]/55 to-transparent pointer-events-none" />
-          {/* Mobile: gradient bleeds down */}
-          <div className="md:hidden absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0d0d0d] pointer-events-none" />
-          {/* Universal vignette on bottom */}
-          <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#0d0d0d]/70 to-transparent pointer-events-none" />
+          {/* Left-bleed gradient so text reads clean */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0d0d0d] via-[#0d0d0d]/30 to-transparent pointer-events-none" />
         </div>
 
         {/* ── Watermark number — desktop only ── */}
@@ -246,28 +242,28 @@ function ServiceCard({ service, index, total, scrollYProgress, isActive }: CardP
             fontFamily: "var(--font-playfair)",
             fontSize: "clamp(7rem, 13vw, 13rem)",
             fontWeight: 700,
-            color: "rgba(255,255,255,0.022)",
+            color: "rgba(255,255,255,0.018)",
             letterSpacing: "-0.04em",
           }}
         >
           {service.number}
         </div>
 
-        {/* ── Text content ── */}
+        {/* ── Text panel ── */}
         <div
           className="
             absolute z-10 flex flex-col justify-between
-            inset-x-0 bottom-0 top-[36%] p-5
-            md:inset-y-0 md:left-0 md:top-0 md:w-[52%] md:right-auto md:p-10 lg:p-14
+            inset-0 p-7
+            md:inset-y-0 md:left-0 md:w-[52%] md:right-auto md:p-10 lg:p-14
           "
         >
           {/* Top block */}
           <div>
             {/* Number + rule */}
-            <div className="flex items-center gap-4 mb-6 md:mb-10">
+            <div className="flex items-center gap-4 mb-7 md:mb-10">
               <span
-                className="text-[9px] md:text-[10px] tracking-[0.65em] uppercase text-gold/40 flex-shrink-0 font-medium"
-                style={{ fontFamily: "var(--font-dm-sans)" }}
+                className="text-[9px] md:text-[10px] tracking-[0.65em] uppercase text-gold/40 flex-shrink-0"
+                style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 500 }}
               >
                 {service.number}
               </span>
@@ -279,7 +275,7 @@ function ServiceCard({ service, index, total, scrollYProgress, isActive }: CardP
               className="text-cream mb-2 md:mb-3 leading-[1.05]"
               style={{
                 fontFamily: "var(--font-playfair)",
-                fontSize: "clamp(1.7rem, 3.2vw, 3rem)",
+                fontSize: "clamp(1.7rem, 3vw, 2.8rem)",
                 fontWeight: 700,
                 letterSpacing: "-0.025em",
               }}
@@ -289,26 +285,26 @@ function ServiceCard({ service, index, total, scrollYProgress, isActive }: CardP
 
             {/* Tagline */}
             <p
-              className="text-gold/55 italic mb-5 md:mb-7"
+              className="text-gold/50 italic mb-6 md:mb-8"
               style={{
                 fontFamily: "var(--font-playfair)",
-                fontSize: "clamp(0.85rem, 1.1vw, 1rem)",
+                fontSize: "clamp(0.85rem, 1.05vw, 0.95rem)",
               }}
             >
               {service.tagline}
             </p>
 
             {/* Short rule */}
-            <div className="w-7 h-px bg-gold/20 mb-5 md:mb-7" />
+            <div className="w-6 h-px bg-gold/20 mb-6 md:mb-8" />
 
             {/* Description */}
             <p
-              className="text-cream/35 leading-[1.85]"
+              className="text-cream/32 leading-[1.9]"
               style={{
                 fontFamily: "var(--font-dm-sans)",
                 fontWeight: 300,
-                fontSize: "clamp(0.78rem, 0.95vw, 0.875rem)",
-                maxWidth: "43ch",
+                fontSize: "clamp(0.78rem, 0.9vw, 0.85rem)",
+                maxWidth: "42ch",
               }}
             >
               {service.description}
@@ -316,12 +312,17 @@ function ServiceCard({ service, index, total, scrollYProgress, isActive }: CardP
           </div>
 
           {/* Bottom row */}
-          <div className="flex items-center justify-between mt-5 md:mt-0">
+          <div className="flex items-center justify-between mt-6 md:mt-0">
             <motion.button
-              whileHover={{ x: 6 }}
+              whileHover={{ x: 5 }}
               transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              className="flex items-center gap-2 text-[9px] md:text-[10px] tracking-[0.45em] uppercase text-gold/40 hover:text-gold transition-colors duration-300"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
+              className="flex items-center gap-2 text-gold/35 hover:text-gold transition-colors duration-300"
+              style={{
+                fontFamily: "var(--font-dm-sans)",
+                fontSize: "0.6rem",
+                letterSpacing: "0.45em",
+                textTransform: "uppercase",
+              }}
             >
               Enquire
               <svg
@@ -340,7 +341,7 @@ function ServiceCard({ service, index, total, scrollYProgress, isActive }: CardP
               className="tabular-nums text-cream/10"
               style={{
                 fontFamily: "var(--font-dm-sans)",
-                fontSize: "0.65rem",
+                fontSize: "0.6rem",
                 letterSpacing: "0.3em",
               }}
             >
@@ -354,37 +355,48 @@ function ServiceCard({ service, index, total, scrollYProgress, isActive }: CardP
   );
 }
 
+/* ── Section ── */
 export default function ServicesSection() {
-  const sectionRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const [isPaused, setIsPaused] = useState(false);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"],
-  });
+  const goToSlide = (newIndex: number) => {
+    if (newIndex === activeIndex) return;
+    setDirection(newIndex > activeIndex ? 1 : -1);
+    setActiveIndex(newIndex);
+  };
 
-  // Track which service is active for the header counter
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    const i = Math.min(
-      Math.floor(v * SERVICES.length),
-      SERVICES.length - 1
-    );
-    setActiveIndex(i);
-  });
+  const goNext = () => {
+    setDirection(1);
+    setActiveIndex((prev) => (prev + 1) % SERVICES.length);
+  };
 
-  // Gold progress bar width
-  const progressWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  const goPrev = () => {
+    setDirection(-1);
+    setActiveIndex((prev) => (prev - 1 + SERVICES.length) % SERVICES.length);
+  };
+
+  useEffect(() => {
+    if (isPaused) return;
+
+    const id = window.setInterval(() => {
+      goNext();
+    }, 6500);
+
+    return () => window.clearInterval(id);
+  }, [isPaused]);
 
   return (
     <section
       id="services"
-      ref={sectionRef}
-      className="relative"
-      style={{ height: `${SERVICES.length * 95 + 80}vh` }}
+      className="relative py-14 md:py-20"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
     >
-      <div className="sticky top-0 h-screen flex flex-col bg-[#0a0a0a] overflow-hidden">
+      <div className="relative h-[86vh] min-h-[680px] md:h-[90vh] md:min-h-[760px] flex flex-col bg-[#0a0a0a] overflow-hidden">
 
-        {/* Noise overlay */}
+        {/* Noise */}
         <div
           className="absolute inset-0 opacity-[0.025] pointer-events-none z-0"
           style={{
@@ -393,20 +405,11 @@ export default function ServicesSection() {
           }}
         />
 
-        {/* Ambient glow — follows active service subtly */}
-        <div
-          className="absolute inset-0 pointer-events-none z-0 opacity-40"
-          style={{
-            background:
-              "radial-gradient(ellipse 60% 50% at 75% 60%, rgba(201,169,110,0.04) 0%, transparent 70%)",
-          }}
-        />
-
-        {/* ── Section header ── */}
+        {/* Section header */}
         <div className="relative z-10 flex-shrink-0 px-4 md:px-8 pt-10 md:pt-12 pb-3">
           <div className="max-w-6xl mx-auto">
             <div className="flex items-end justify-between mb-3 md:mb-4">
-              {/* Left: label + title */}
+
               <div>
                 <p
                   className="text-[9px] md:text-[10px] tracking-[0.55em] uppercase text-gold/40 mb-1.5"
@@ -425,23 +428,20 @@ export default function ServicesSection() {
                   }}
                 >
                   Our{" "}
-                  <span
-                    className="text-gold italic"
-                    style={{ fontFamily: "var(--font-playfair)" }}
-                  >
+                  <span className="text-gold italic" style={{ fontFamily: "var(--font-playfair)" }}>
                     Services
                   </span>
                 </h2>
               </div>
 
-              {/* Right: live service counter */}
+              {/* Live counter */}
               <div className="text-right flex items-baseline gap-1.5">
                 <motion.span
                   key={activeIndex}
                   initial={{ y: 8, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                  className="text-gold/50 tabular-nums"
+                  transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                  className="text-gold/45 tabular-nums"
                   style={{
                     fontFamily: "var(--font-playfair)",
                     fontSize: "clamp(1.1rem, 2vw, 1.5rem)",
@@ -454,7 +454,7 @@ export default function ServicesSection() {
                   className="text-cream/15 tabular-nums"
                   style={{
                     fontFamily: "var(--font-dm-sans)",
-                    fontSize: "0.65rem",
+                    fontSize: "0.62rem",
                     letterSpacing: "0.2em",
                   }}
                 >
@@ -464,32 +464,87 @@ export default function ServicesSection() {
             </div>
 
             {/* Progress track */}
-            <div className="h-px bg-cream/[0.07] overflow-hidden rounded-full">
+            <div className="h-px bg-cream/[0.06] overflow-hidden rounded-full">
               <motion.div
                 className="h-full rounded-full"
+                animate={{
+                  width: `${((activeIndex + 1) / SERVICES.length) * 100}%`,
+                }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 style={{
-                  width: progressWidth,
                   background:
-                    "linear-gradient(90deg, rgba(201,169,110,0.7) 0%, rgba(201,169,110,0.3) 100%)",
+                    "linear-gradient(90deg, rgba(201,169,110,0.65) 0%, rgba(201,169,110,0.28) 100%)",
                 }}
               />
             </div>
           </div>
         </div>
 
-        {/* ── Stacking cards ── */}
+        {/* Carousel slide */}
         <div className="relative z-10 flex-1 px-4 md:px-8 pb-4 overflow-hidden">
-          <div className="relative h-full max-w-6xl mx-auto">
-            {SERVICES.map((service, i) => (
-              <ServiceCard
-                key={service.number}
-                service={service}
-                index={i}
+          <div className="relative w-full h-full min-h-[420px] md:min-h-[520px] max-w-6xl mx-auto">
+            <AnimatePresence initial={false} custom={direction} mode="wait">
+              <ServiceSlide
+                key={SERVICES[activeIndex].number}
+                service={SERVICES[activeIndex]}
+                index={activeIndex}
                 total={SERVICES.length}
-                scrollYProgress={scrollYProgress}
-                isActive={i === activeIndex}
+                direction={direction}
+                onSwipeNext={goNext}
+                onSwipePrev={goPrev}
               />
-            ))}
+            </AnimatePresence>
+          </div>
+        </div>
+
+        {/* Controls */}
+        <div className="relative z-20 px-4 md:px-8 pb-8 md:pb-10">
+          <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={goPrev}
+                className="h-10 w-10 md:h-11 md:w-11 rounded-full border border-gold/30 text-gold/70 hover:text-gold hover:border-gold/55 transition-colors duration-300 grid place-items-center"
+                aria-label="Previous service"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <path d="M15 18l-6-6 6-6" />
+                </svg>
+              </button>
+
+              <button
+                type="button"
+                onClick={goNext}
+                className="h-10 w-10 md:h-11 md:w-11 rounded-full border border-gold/30 text-gold/70 hover:text-gold hover:border-gold/55 transition-colors duration-300 grid place-items-center"
+                aria-label="Next service"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <path d="M9 6l6 6-6 6" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="flex items-center gap-2" role="tablist" aria-label="Services pagination">
+              {SERVICES.map((service, i) => {
+                const isActive = i === activeIndex;
+                return (
+                  <button
+                    key={service.number}
+                    type="button"
+                    onClick={() => goToSlide(i)}
+                    className="h-2 rounded-full transition-all duration-300"
+                    style={{
+                      width: isActive ? "1.9rem" : "0.55rem",
+                      background: isActive
+                        ? "rgba(201,169,110,0.75)"
+                        : "rgba(245,240,232,0.2)",
+                    }}
+                    aria-label={`Go to service ${i + 1}: ${service.title}`}
+                    aria-current={isActive ? "true" : undefined}
+                  />
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
