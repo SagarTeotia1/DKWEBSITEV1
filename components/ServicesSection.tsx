@@ -9,24 +9,24 @@ import {
 const SERVICES = [
   {
     number: "01",
-    title: "Storytelling Videos",
-    tagline: "Narratives that move people",
+    title: "Brand Reels",
+    tagline: "Hook fast. Stay memorable.",
     description:
-      "Brand stories and emotional campaigns that forge authentic connections. We craft visual narratives that linger long after the screen goes dark.",
+      "Scroll-stopping branded reels crafted for attention and retention. Platform-native storytelling designed to turn quick views into lasting brand recall.",
   },
   {
     number: "02",
-    title: "Micro Dramas",
-    tagline: "Short. Sharp. Unforgettable.",
-    description:
-      "Serialised short-form dramatic content engineered for social platforms. High-concept stories in compact formats that demand to be rewatched.",
-  },
-  {
-    number: "03",
     title: "TVC Ads",
     tagline: "Broadcast quality. Every frame.",
     description:
       "Television commercials built with cinematic precision. From concept to colour grade, we create spots that captivate mass audiences and drive action.",
+  },
+  {
+    number: "03",
+    title: "Storytelling Videos",
+    tagline: "Narratives that move people",
+    description:
+      "Brand stories and emotional campaigns that forge authentic connections. We craft visual narratives that linger long after the screen goes dark.",
   },
   {
     number: "04",
@@ -37,20 +37,27 @@ const SERVICES = [
   },
   {
     number: "05",
+    title: "Micro Dramas",
+    tagline: "Short. Sharp. Unforgettable.",
+    description:
+      "Serialised short-form dramatic content engineered for social platforms. High-concept stories in compact formats that demand to be rewatched.",
+  },
+  {
+    number: "06",
     title: "Documentaries",
     tagline: "Truth, beautifully told.",
     description:
       "In-depth documentary productions exploring real stories with cinematic depth. Journalistic rigour meets visual artistry.",
   },
   {
-    number: "06",
+    number: "07",
     title: "UGC Videos",
     tagline: "Authentic. Scalable. Effective.",
     description:
       "User-generated-style content that feels native to the platform. Raw authenticity, strategic intent — the kind of content people actually share.",
   },
   {
-    number: "07",
+    number: "08",
     title: "Voxpops",
     tagline: "Real voices. Real impact.",
     description:
