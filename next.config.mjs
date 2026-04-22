@@ -6,8 +6,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   outputFileTracingRoot: __dirname,
-  // Use a custom dist directory to avoid intermittent .next manifest issues on Windows.
-  distDir: ".next-local",
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
