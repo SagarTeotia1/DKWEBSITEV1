@@ -20,12 +20,12 @@ type Reel = {
 };
 
 const reels: Reel[] = [
-  { id: 1, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/Wellbeing%20Ad%20.mp4", title: "Wellbeing Nutritions", client: "Wellbeing Nutritions", category: "Product Film", year: "2024" },
-  { id: 2, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/keventers.mp4", title: "Keventers", client: "Keventers", category: "Social Content", year: "2023" },
-  { id: 3, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/Astrotalk%20shadi1.mp4", title: "Astrotalk", client: "Astrotalk", category: "Digital Content", year: "2024" },
-  { id: 4, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/Instaqueen%20trailer.MP4", title: "Micro Drama ", client: "", category: "Micro Drama", year: "2024" },
   { id: 5, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/Wellbeing%20Ad1.mp4", title: "Wellbeing Nutritions", client: "Wellbeing Nutritions", category: "Makeup Film", year: "2023" },
+  { id: 2, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/keventers.mp4", title: "Keventers", client: "Keventers", category: "Social Content", year: "2023" },
+  { id: 4, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/Instaqueen%20trailer.MP4", title: "Micro Drama ", client: "", category: "Micro Drama", year: "2024" },
+  { id: 1, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/Wellbeing%20Ad%20.mp4", title: "Wellbeing Nutritions", client: "Wellbeing Nutritions", category: "Product Film", year: "2024" },
   { id: 6, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/Mera%20Husband%20Trailer%20.mp4", title: "Micro Drama", client: "", category: "Micro Drama", year: "2023" },
+  { id: 3, src: "https://pub-753e2e06a0a3437b9cef4cda8815d7a9.r2.dev/DK-WEBSITE/Astrotalk%20shadi1.mp4", title: "Astrotalk", client: "Astrotalk", category: "Digital Content", year: "2024" },
 ];
 
 // ── Card ─────────────────────────────────────────────────────────────────────

@@ -132,6 +132,39 @@ export default function AboutSection() {
 
           </div>
 
+          {/* SEO-rich content — screen-reader accessible, visually minimal */}
+          <div className="sr-only">
+            <h2>Best Production House in Delhi NCR — Digital Kalakaar Productions</h2>
+            <p>
+              Digital Kalakaar Productions is a top-rated video production company in New Delhi, India,
+              serving brands across Delhi NCR (Noida, Gurugram, Gurgaon, Faridabad) and all of India since 2018.
+              We are the best production house in Delhi for brand films, TVC commercials, Instagram reels,
+              short films, micro dramas, documentaries, UGC videos, and voxpops.
+            </p>
+            <h3>Our Video Production Services in Delhi NCR</h3>
+            <ul>
+              <li>Brand Reels — Instagram and social media reel production in Delhi</li>
+              <li>TVC Ads — TV commercial production Delhi NCR</li>
+              <li>Storytelling Videos — brand narrative film production</li>
+              <li>Short Films — cinematic short film production Delhi</li>
+              <li>Micro Dramas — serialised short-form drama for social platforms</li>
+              <li>Documentaries — documentary film production Delhi India</li>
+              <li>UGC Videos — user-generated content creation agency Delhi</li>
+              <li>Voxpops — street interview and opinion video production</li>
+            </ul>
+            <h3>Brands We Have Worked With</h3>
+            <p>
+              Astrotalk, Keventers, PolicyBazaar, Shaadi.com, Wellbeing Nutritions,
+              The Indus Valley, MicroKahani, Vahaflix, Stage, BJP, Government of India,
+              GoGoGo, Viralo, Athrox, TipTop, Crafto.
+            </p>
+            <p>
+              Contact Delhi&apos;s best production house at digitalkalakaarproductions@gmail.com
+              or call +91 88514 75517 for brand films, TVC production, reel production,
+              short films, micro dramas, documentaries, and all video production services in Delhi NCR.
+            </p>
+          </div>
+
         </div>
       </div>
     </section>

@@ -145,6 +145,9 @@ export default function Hero() {
       className="sticky top-0 w-full min-h-screen bg-[#0a0a0a] flex flex-col overflow-hidden"
       style={{ zIndex: 0 }}
     >
+      <h1 className="sr-only">
+        Digital Kalakaar Productions — Best Production House in Delhi NCR | Brand Films, TVC Commercials, Instagram Reels, Short Films, Micro Dramas, Documentaries, UGC Videos &amp; Voxpops
+      </h1>
       {/* ── Ambient gold glow — top-left ── */}
       <motion.div
         className="absolute pointer-events-none"
