@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 import {
   motion,
   useMotionValue,
@@ -431,7 +432,7 @@ export default function ReelSection() {
             </p>
 
             <div className="mt-10">
-              <a
+              <Link
                 href="/work"
                 className="group inline-flex items-center gap-3 px-8 py-4 rounded-full border border-white/[0.12] hover:border-[#c9a84c]/50 hover:bg-[#c9a84c]/[0.04] transition-all duration-300"
                 style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -440,7 +441,7 @@ export default function ReelSection() {
                   See Our Work
                 </span>
                 <span className="text-white/25 group-hover:text-[#c9a84c] group-hover:translate-x-1 transition-all duration-300 text-sm">→</span>
-              </a>
+              </Link>
             </div>
 
             {!done && (
