@@ -8,6 +8,7 @@ import AboutSection from "@/components/AboutSection";
 import ClientsSection from "@/components/ClientsSection";
 import ReelSection from "@/components/ReelSection";
 import ServicesSection from "@/components/ServicesSection";
+import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -23,6 +24,7 @@ export default function Home() {
         <ClientsSection />
         <ReelSection />
         <ServicesSection />
+        <FAQSection />
       </main>
       <Footer />
     </>

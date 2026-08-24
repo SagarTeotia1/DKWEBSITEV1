@@ -6,7 +6,7 @@ import { motion, useInView, useScroll, useTransform } from "framer-motion";
 const navItems = [
   { label: "Work",     href: "/work" },
   { label: "About",    href: "#about" },
-  { label: "Services", href: "#services" },
+  { label: "Services", href: "/services" },
 ];
 
 export default function Footer() {

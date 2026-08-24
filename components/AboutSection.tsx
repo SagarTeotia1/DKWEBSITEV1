@@ -132,38 +132,65 @@ export default function AboutSection() {
 
           </div>
 
-          {/* SEO-rich content — screen-reader accessible, visually minimal */}
-          <div className="sr-only">
-            <h2>Best Production House in Delhi NCR — Digital Kalakaar Productions</h2>
-            <p>
-              Digital Kalakaar Productions is a top-rated video production company in New Delhi, India,
-              serving brands across Delhi NCR (Noida, Gurugram, Gurgaon, Faridabad) and all of India since 2018.
-              We are the best production house in Delhi for brand films, TVC commercials, Instagram reels,
-              short films, micro dramas, documentaries, UGC videos, and voxpops.
+          {/* Social proof strip */}
+          <motion.div
+            className="w-full max-w-2xl mt-4 mb-2 grid grid-cols-3 gap-4 md:gap-8 border-t border-[#1a1514]/10 pt-8"
+            initial={{ opacity: 0, y: 18 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.85, delay: 1.0, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {[
+              { value: "15M+", label: "Combined Followers" },
+              { value: "200M+", label: "Monthly Views" },
+              { value: "50+", label: "Brands Served" },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <p
+                  className="text-[#c9a84c]"
+                  style={{ fontFamily: "var(--font-playfair)", fontSize: "clamp(1.6rem,3.5vw,2.4rem)", fontWeight: 700 }}
+                >
+                  {stat.value}
+                </p>
+                <p
+                  className="mt-1 text-[10px] md:text-xs tracking-[0.15em] uppercase text-[#2c2723]/55"
+                  style={{ fontFamily: "var(--font-dm-sans)" }}
+                >
+                  {stat.label}
+                </p>
+              </div>
+            ))}
+          </motion.div>
+
+          {/* SEO/AEO/GEO content — visible, matches FAQPage JSON-LD 1:1 */}
+          <motion.div
+            className="w-full max-w-2xl mt-10 pt-8 border-t border-[#1a1514]/10"
+            initial={{ opacity: 0, y: 18 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.85, delay: 1.1, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <h3
+              className="text-center text-[#1a1514]/85 mb-3"
+              style={{ fontFamily: "var(--font-playfair)", fontSize: "clamp(1.1rem,2vw,1.4rem)", fontWeight: 700 }}
+            >
+              Best Production House &amp; UGC Agency in Delhi NCR
+            </h3>
+            <p
+              className="text-center text-[0.82rem] text-[#2c2723]/60 leading-[1.85] mb-5"
+              style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 300 }}
+            >
+              Digital Kalakaar Productions is a top-rated video production house, UGC production house, and micro
+              drama production house in New Delhi, serving brands across Delhi NCR (Noida, Gurugram, Gurgaon,
+              Faridabad) and all of India since 2018 — brand reels, TVC ads, storytelling videos, short films,
+              micro dramas, documentaries, UGC videos, and voxpops.
             </p>
-            <h3>Our Video Production Services in Delhi NCR</h3>
-            <ul>
-              <li>Brand Reels — Instagram and social media reel production in Delhi</li>
-              <li>TVC Ads — TV commercial production Delhi NCR</li>
-              <li>Storytelling Videos — brand narrative film production</li>
-              <li>Short Films — cinematic short film production Delhi</li>
-              <li>Micro Dramas — serialised short-form drama for social platforms</li>
-              <li>Documentaries — documentary film production Delhi India</li>
-              <li>UGC Videos — user-generated content creation agency Delhi</li>
-              <li>Voxpops — street interview and opinion video production</li>
-            </ul>
-            <h3>Brands We Have Worked With</h3>
-            <p>
-              Astrotalk, Keventers, PolicyBazaar, Shaadi.com, Wellbeing Nutritions,
-              The Indus Valley, MicroKahani, Vahaflix, Stage, BJP, Government of India,
-              GoGoGo, Viralo, Athrox, TipTop, Crafto.
+            <p
+              className="text-center text-[0.78rem] text-[#2c2723]/45 leading-[1.8]"
+              style={{ fontFamily: "var(--font-dm-sans)", fontWeight: 300 }}
+            >
+              Brands we&apos;ve worked with: Astrotalk, Keventers, PolicyBazaar, Shaadi.com, Wellbeing Nutritions,
+              The Indus Valley, MicroKahani, Vahaflix, Stage, and Government of India campaigns.
             </p>
-            <p>
-              Contact Delhi&apos;s best production house at digitalkalakaarproductions@gmail.com
-              or call +91 88514 75517 for brand films, TVC production, reel production,
-              short films, micro dramas, documentaries, and all video production services in Delhi NCR.
-            </p>
-          </div>
+          </motion.div>
 
         </div>
       </div>

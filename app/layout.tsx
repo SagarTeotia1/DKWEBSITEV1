@@ -24,11 +24,11 @@ const siteUrl = "https://digitalkalakaarproductions.com";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Digital Kalakaar | Best Production House in Delhi NCR — Brand Films, TVC & Reels",
+    default: "Digital Kalakaar | Best Production House & UGC Agency in Delhi NCR",
     template: "%s | Digital Kalakaar Productions",
   },
   description:
-    "Digital Kalakaar is Delhi's top production house for brand films, TVC commercials, Instagram reels, short films, micro dramas, documentaries, UGC videos & voxpops. 50+ brands served across India since 2018 — Astrotalk, Keventers, PolicyBazaar, Shaadi.com.",
+    "Digital Kalakaar is Delhi's best production house, best UGC production house, and best micro drama production house — brand films, TVC commercials, Instagram reels, short films, micro dramas, documentaries, UGC videos & voxpops. 50+ brands served since 2018 — Astrotalk, Keventers, PolicyBazaar, Shaadi.com.",
   keywords: [
     // Brand
     "Digital Kalakaar",
@@ -39,11 +39,22 @@ export const metadata: Metadata = {
     "best production house in Delhi",
     "top production house Delhi",
     "best production house Delhi NCR",
+    "best agency in Delhi",
+    "best agency Delhi NCR",
     "production house New Delhi India",
     "video production company Delhi",
     "video production agency Delhi NCR",
     "film production company Delhi",
     "creative production house Delhi",
+    // Core — UGC
+    "best UGC production house in Delhi",
+    "best UGC agency in Delhi",
+    "top UGC production house Delhi",
+    "UGC production company Delhi NCR",
+    // Core — micro drama
+    "best micro drama production house in Delhi",
+    "top micro drama production company Delhi",
+    "micro drama production house Delhi NCR",
     // Services — brand films
     "brand film production Delhi",
     "brand film production India",
@@ -167,7 +178,7 @@ export default function RootLayout({
         telephone: "+918851475517",
         slogan: "Where Vision Meets Craft",
         description:
-          "Digital Kalakaar Productions is Delhi NCR's best production house, specialising in brand films, TVC commercials, Instagram reels, short films, micro dramas, documentaries, UGC videos, and voxpops for brands across India since 2018.",
+          "Digital Kalakaar Productions is Delhi NCR's best production house, specialising in brand films, TVC commercials, Instagram reels, short films, micro dramas, documentaries, UGC videos, and voxpops for brands across India since 2018. Our content reaches a combined 15M+ followers and 200M+ monthly views across our social platforms.",
         image: `${siteUrl}/opengraph-image`,
         logo: {
           "@type": "ImageObject",
@@ -314,6 +325,9 @@ export default function RootLayout({
         ],
         sameAs: [
           "https://www.instagram.com/digitalkalakaar_productions/",
+          "https://www.instagram.com/digitalkalakaar/",
+          "https://www.facebook.com/DigitalKalakaar/",
+          "https://www.youtube.com/@digitalkalakaar",
         ],
         knowsAbout: [
           "Video Production",
@@ -488,7 +502,7 @@ export default function RootLayout({
         name: "Is Digital Kalakaar the best production house in Delhi?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Digital Kalakaar Productions is one of Delhi's top production houses with 7+ years of experience, 50+ brand clients, and a portfolio spanning TVC commercials, brand films, Instagram reels, micro dramas, short films, and documentaries. We serve brands across Delhi NCR and all of India.",
+          text: "Digital Kalakaar Productions is one of Delhi's top production houses with 7+ years of experience, 50+ brand clients, a combined social reach of 15M+ followers and 200M+ monthly views, and a portfolio spanning TVC commercials, brand films, Instagram reels, micro dramas, short films, and documentaries. We serve brands across Delhi NCR and all of India.",
         },
       },
       {
@@ -525,10 +539,42 @@ export default function RootLayout({
       },
       {
         "@type": "Question",
+        name: "How big is Digital Kalakaar's audience and reach?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Across our social platforms — Facebook, Instagram, and YouTube combined — Digital Kalakaar reaches 15M+ followers and generates 200M+ views every month, giving brand content real organic distribution beyond the production itself.",
+        },
+      },
+      {
+        "@type": "Question",
         name: "Does Digital Kalakaar serve brands outside Delhi?",
         acceptedAnswer: {
           "@type": "Answer",
           text: "Yes. While based in New Delhi, Digital Kalakaar Productions serves brands across India including Mumbai, Bangalore, Hyderabad, and all of Delhi NCR (Noida, Gurugram, Gurgaon, Faridabad). We have produced content for national brands and government campaigns.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Which is the best UGC production house in Delhi?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Digital Kalakaar Productions is one of Delhi's best UGC production houses, producing authentic, platform-native UGC (user-generated content) video at scale for performance marketing and organic social campaigns. Our in-house UGC team in New Delhi has produced UGC content for 50+ brands including Astrotalk, Keventers, and Wellbeing Nutritions.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Which is the best micro drama production house in Delhi?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Digital Kalakaar Productions is a leading micro drama production house in Delhi NCR, producing serialised short-form dramatic content for social platforms and OTT micro-drama apps. Our micro drama credits include InstaQueen and Mera Husband, produced end-to-end from script to final edit in New Delhi.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "What is the best agency in Delhi for video and UGC content?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Digital Kalakaar Productions is a top full-service video, UGC, and micro drama production agency in Delhi NCR, offering brand films, TVC commercials, Instagram reels, short films, micro dramas, documentaries, UGC videos, and voxpops under one in-house team, with 50+ brands served since 2018.",
         },
       },
     ],
